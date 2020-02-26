@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const Usuario = require('./models/Usuario');
 const Time = require('./models/Time');
-const Item = require('./models/Item');
-const mongoose = require('mongoose');
 
 const routes = Router();
 
@@ -22,34 +20,44 @@ routes.delete('/users/:id', (request, response) => {
    });
 });
 
-routes.post('/usuarios', async (request, response, {usuarioID, timeID}) => {
+routes.post('/usuarios', async (request, response) => {
    const { nome, cargo, tecnologias, times } = request.body;
 
    const tecnologiasArray = tecnologias
       .split(',')
       .map(tecnologia => tecnologia.trim());
 
-   let usuario = await Usuario.create({
+   const usuario = await Usuario.create({
       nome,
       cargo,
       tecnologias: tecnologiasArray,
    });
 
    times.forEach(async element => {
-      let updateTimes = await Time.create(
-         { 
-            nome: element.nome,
-         }
-      )
+      const updateTimes = await Time.create({
+         nome: element.nome,
+      });
 
       // TO-DO verificar existencia de time antes de adicionar na base
-      let teste1 = await Time.updateOne({_id: updateTimes._id}, { "$addToSet": {usuarios : usuario._id} }, (res) => {
-         console.log(res);
-      });
+      const teste1 = await Time.updateOne(
+         { id: updateTimes.id },
+         { $addToSet: { usuarios: usuario.id } },
+         res => {
+            console.log(res);
+         }
+      );
 
-      let teste2 = await Usuario.updateOne({_id: usuario._id}, { "$addToSet": {times : updateTimes._id} }, (res) => {
-         console.log(res);
-      });
+      console.log(teste1);
+
+      const teste2 = await Usuario.updateOne(
+         { id: usuario.id },
+         { $addToSet: { times: updateTimes.id } },
+         res => {
+            console.log(res);
+         }
+      );
+
+      console.log(teste2);
    });
 
    return response.json(usuario);
