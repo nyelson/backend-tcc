@@ -8,7 +8,7 @@ routes.get('/users', (request, response) => {
    console.log(request.query);
 
    return response.json({
-      message: 'Hello!',
+      message: 'Test!',
    });
 });
 
