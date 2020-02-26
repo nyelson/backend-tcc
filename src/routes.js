@@ -1,29 +1,12 @@
 const { Router } = require('express');
 const Usuario = require('./models/Usuario');
-// const Time = require('./models/Time');
-// const Item = require('./models/Item');
+const Time = require('./models/Time');
 
 const routes = Router();
 
-routes.get('/users', (request, response) => {
-   console.log(request.query);
-
-   return response.json({
-      message: 'Hello!',
-   });
-});
-
-routes.delete('/users/:id', (request, response) => {
-   console.log(request.params);
-
-   return response.json({
-      message: 'Hello!',
-   });
-});
-
 routes.post('/usuarios', async (request, response) => {
    const { nome, cargo, tecnologias, times } = request.body;
-   // const timesArray = times.split(',').map(time => time.Time());
+
    const tecnologiasArray = tecnologias
       .split(',')
       .map(tecnologia => tecnologia.trim());
@@ -32,7 +15,24 @@ routes.post('/usuarios', async (request, response) => {
       nome,
       cargo,
       tecnologias: tecnologiasArray,
-      times,
+   });
+
+   times.forEach(async element => {
+      const updateTimes = await Time.create({
+         nome: element.nome,
+      });
+
+      await Time.updateOne(
+         { id: updateTimes.id },
+         { $addToSet: { usuarios: usuario.id } },
+         () => {}
+      );
+
+      await Usuario.updateOne(
+         { id: usuario.id },
+         { $addToSet: { times: updateTimes.id } },
+         () => {}
+      );
    });
 
    return response.json(usuario);
