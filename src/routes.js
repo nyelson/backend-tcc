@@ -4,22 +4,6 @@ const Time = require('./models/Time');
 
 const routes = Router();
 
-routes.get('/users', (request, response) => {
-   console.log(request.query);
-
-   return response.json({
-      message: 'Test!',
-   });
-});
-
-routes.delete('/users/:id', (request, response) => {
-   console.log(request.params);
-
-   return response.json({
-      message: 'Hello!',
-   });
-});
-
 routes.post('/usuarios', async (request, response) => {
    const { nome, cargo, tecnologias, times } = request.body;
 
@@ -38,26 +22,17 @@ routes.post('/usuarios', async (request, response) => {
          nome: element.nome,
       });
 
-      // TO-DO verificar existencia de time antes de adicionar na base
-      const teste1 = await Time.updateOne(
+      await Time.updateOne(
          { id: updateTimes.id },
          { $addToSet: { usuarios: usuario.id } },
-         res => {
-            console.log(res);
-         }
+         () => {}
       );
 
-      console.log(teste1);
-
-      const teste2 = await Usuario.updateOne(
+      await Usuario.updateOne(
          { id: usuario.id },
          { $addToSet: { times: updateTimes.id } },
-         res => {
-            console.log(res);
-         }
+         () => {}
       );
-
-      console.log(teste2);
    });
 
    return response.json(usuario);
