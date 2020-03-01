@@ -6,10 +6,11 @@ const routes = Router();
 const validateTeam = (request, response, next) => {
    const { nome } = request.body;
 
-   if (!nome)
+   if (!nome) {
       return response
          .status(400)
          .json({ erro: 'Campos obrigatórios não preenchidos' });
+   }
 
    return next();
 };
@@ -21,7 +22,7 @@ routes.post('/times', validateTeam, async (request, response) => {
       nome,
    });
 
-   return response.json(time);
+   return response.status(201).json(time);
 });
 
 module.exports = routes;
