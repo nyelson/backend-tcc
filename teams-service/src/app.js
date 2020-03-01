@@ -4,7 +4,8 @@ const routes = require('./routes/routes');
 
 const app = express();
 mongoose.connect(
-   'mongodb+srv://admin:admin@tcc-database-ftyyo.mongodb.net/test?retryWrites=true&w=majority',
+   process.env.MONGO_URL ||
+      'mongodb+srv://admin:admin@tcc-database-ftyyo.mongodb.net/test?retryWrites=true&w=majority',
    {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -14,4 +15,4 @@ mongoose.connect(
 app.use(express.json());
 app.use(routes);
 
-app.listen(3334);
+module.exports = app;
