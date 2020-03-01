@@ -6,9 +6,9 @@
    "license": "MIT",
    "scripts": {
       "test": "echo \"Error: no test specified\"",
-      "dev": "nodemon usuario-services/src/index.js",
-      "lint": "eslint usuario-services/src/**/*.js",
-      "lint:fix": "eslint usuario-services/src/**/*.js --fix",
+      "dev": "nodemon ./src/index.js",
+      "lint": "eslint./src/**/*.js",
+      "lint:fix": "eslint ./src/**/*.js --fix",
       "test-and-lint": "npm run test && npm run lint"
    },
    "dependencies": {
