@@ -1,8 +1,7 @@
 {
-   "name": "backend-tcc",
+   "name": "usuario-services",
    "version": "1.0.0",
    "main": "index.js",
-   "repository": "https://github.com/nyelson/backend-tcc.git",
    "license": "MIT",
    "scripts": {
       "test": "echo \"Error: no test specified\"",
