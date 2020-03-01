@@ -7,9 +7,9 @@
       "test": "jest --forceExit",
       "test:watch": "jest --watch",
       "test:detect": "jest --detectOpenHandles",
-      "dev": "nodemon ./src/server.js",
-      "lint": "eslint ./src/**/*.js",
-      "lint:fix": "eslint ./src/**/*.js --fix",
+      "dev": "nodemon teams-service/src/server.js",
+      "lint": "eslint teams-service/src/**/*.js",
+      "lint:fix": "eslint teams-service/src/**/*.js --fix",
       "test-and-lint": "npm run test && npm run lint"
    },
    "dependencies": {
