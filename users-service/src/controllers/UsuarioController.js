@@ -1,46 +1,38 @@
-const Usuario = require('../models/Usuario');
+const UsuarioBusiness = require('../business/UsuarioBusiness');
 
 module.exports = {
    async findUser(request, response) {
       const { id } = request.headers;
 
-      const usuario = await Usuario.findById(id);
+      const usuario = await UsuarioBusiness.findUserById(id);
 
-      try {
-         if (!usuario) return response.status(200).json(usuario);
-         return response.status(400).json({ error: 'Usuario não existe' });
-      } catch (error) {
-         return response.status(400).json({ error: 'Usuario não existe' });
-      }
+      if (!usuario) return response.status(200).json(usuario);
+      return response.status(400).json({ error: 'Usuario não existe' });
    },
    async addUser(request, response) {
       const { nome, cargo, tecnologias } = request.body;
 
-      const tecnologiasArray = tecnologias
-         .split(',')
-         .map(tecnologia => tecnologia.trim());
+      let usuario = await UsuarioBusiness.validarUsuarioExistente(nome);
 
-      const usuario = await Usuario.create({
-         nome,
-         cargo,
-         tecnologias: tecnologiasArray,
-      });
+      if (!usuario)
+         usuario = await UsuarioBusiness.addUser(nome, cargo, tecnologias);
+      else
+         return response
+            .status(400)
+            .json({ error: 'Usuario já existente na base de dados' });
 
       return response.status(200).json(usuario);
    },
    async deleteUser(request, response) {
       const { id } = request.headers;
 
-      const usuario = await Usuario.findById(id);
+      const retorno = await UsuarioBusiness.deleteUserById(id);
 
-      try {
-         if (!usuario) Usuario.delete(usuario);
-
+      if (retorno)
          return response
             .status(200)
             .json({ error: 'Usuario deletado com sucesso!' });
-      } catch (error) {
-         return response.status(400).json({ error: 'Usuario não existe' });
-      }
+
+      return response.status(400).json({ error: 'Usuario não existe' });
    },
 };

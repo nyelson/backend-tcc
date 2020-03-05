@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const timeModel = require('./Time');
 
 const UsuarioSchema = new mongoose.Schema({
    id: mongoose.Types.ObjectId,
