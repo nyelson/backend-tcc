@@ -12,9 +12,7 @@ module.exports = {
       return await UsuarioRepository.addUser(nome, cargo, tecnologias);
    },
    async findUserById(id) {
-      const usuario = await UsuarioRepository.findUserById(id);
-
-      return usuario;
+      return await UsuarioRepository.findUserById(id);
    },
    async findUserByName(name) {
       return await UsuarioRepository.findUserByName(name);
