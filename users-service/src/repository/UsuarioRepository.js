@@ -7,22 +7,14 @@ const RETORNO_ERRO_INESPERADO = 3;
 
 module.exports = {
    async addUser(nome, cargo, tecnologias) {
-      const tecnologiasArray = tecnologias
-         .split(',')
-         .map(tecnologia => tecnologia.trim());
-
-      const usuario = await Usuario.create({
+      return await Usuario.create({
          nome,
          cargo,
-         tecnologias: tecnologiasArray,
+         tecnologias,
       });
-
-      return usuario;
    },
    async findUserByName(name) {
-      const usuario = await Usuario.find({ nome: name }, () => {});
-
-      return usuario;
+      return await Usuario.find({ nome: name }, () => {});
    },
    async findUserById(id) {
       return await Usuario.findById(id);
@@ -34,13 +26,13 @@ module.exports = {
    async deleteUserById(id) {
       const usuario = Usuario.findById(id);
 
-      if (!usuario)
+      if (usuario)
          Usuario.deleteOne(
             {
                nome: usuario.nome,
             },
             err => {
-               if (!err) return RETORNO_ERRO_INESPERADO;
+               if (err) return RETORNO_ERRO_INESPERADO;
                return RETORNO_SUCESSO;
             }
          );
@@ -50,13 +42,13 @@ module.exports = {
    async deleteUserByName(name) {
       const usuario = this.findUserByName(name);
 
-      if (!usuario)
+      if (usuario)
          Usuario.deleteOne(
             {
                nome: usuario.nome,
             },
             err => {
-               if (!err) return RETORNO_ERRO_INESPERADO;
+               if (err) return RETORNO_ERRO_INESPERADO;
                return RETORNO_SUCESSO;
             }
          );
