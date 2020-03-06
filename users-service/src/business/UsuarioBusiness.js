@@ -24,9 +24,7 @@ module.exports = {
       return usuario;
    },
    async findUserByTime(nomeTime) {
-      const usuario = await UsuarioRepository.findUserByTime(nomeTime);
-
-      return usuario;
+      return await UsuarioRepository.findUserByTime(nomeTime);
    },
    async deleteUserById(id) {
       return await UsuarioRepository.deleteUserById(id);
