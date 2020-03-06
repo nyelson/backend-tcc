@@ -7,7 +7,7 @@ module.exports = {
       const usuario = await UsuarioBusiness.findUserById(id);
 
       if (!usuario) return response.status(200).json(usuario);
-      return response.status(400).json({ error: 'Usuario não existe' });
+      return response.status(404).json({ error: 'Usuario não existe' });
    },
    async addUser(request, response) {
       const { nome, cargo, tecnologias } = request.body;
