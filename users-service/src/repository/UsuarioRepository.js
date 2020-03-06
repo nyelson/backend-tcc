@@ -31,9 +31,7 @@ module.exports = {
    },
    async findUserByTime(nomeTime) {
       const time = await Time.find({ nome: nomeTime });
-      const usuario = await Usuario.find({ times: time.id });
-
-      return usuario;
+      return await Usuario.find({ times: time.id });
    },
    async deleteUserById(id) {
       const usuario = Usuario.findById(id);
