@@ -9,9 +9,7 @@ module.exports = {
       return usuario.length > 0;
    },
    async addUser(nome, cargo, tecnologias) {
-      const usuario = await UsuarioRepository.addUser(nome, cargo, tecnologias);
-
-      return usuario;
+      return await UsuarioRepository.addUser(nome, cargo, tecnologias);
    },
    async findUserById(id) {
       const usuario = await UsuarioRepository.findUserById(id);
