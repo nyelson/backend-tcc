@@ -21,7 +21,7 @@ module.exports = {
             .status(400)
             .json({ error: 'Usuario já existente na base de dados' });
 
-      return response.status(200).json(usuario);
+      return response.status(201).json(usuario);
    },
    async deleteUser(request, response) {
       const { id } = request.headers;
