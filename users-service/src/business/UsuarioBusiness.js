@@ -36,8 +36,6 @@ module.exports = {
    async deleteUserByName(name) {
       const retorno = await UsuarioRepository.deleteUserByName(name);
 
-      if (retorno !== RETORNO_SUCESSO) return true;
-
-      return false;
+     return retorno !== RETORNO_SUCESSO;
    },
 };
