@@ -9,23 +9,28 @@ module.exports = {
       return usuario.length > 0;
    },
    async addUser(nome, cargo, tecnologias) {
-      return await UsuarioRepository.addUser(nome, cargo, tecnologias);
+      const user = await UsuarioRepository.addUser(nome, cargo, tecnologias);
+      return user;
    },
    async findUserById(id) {
-      return await UsuarioRepository.findUserById(id);
+      const user = await UsuarioRepository.findUserById(id);
+      return user;
    },
    async findUserByName(name) {
-      return await UsuarioRepository.findUserByName(name);
+      const user = await UsuarioRepository.findUserByName(name);
+      return user;
    },
    async findUserByTime(nomeTime) {
-      return await UsuarioRepository.findUserByTime(nomeTime);
+      const user = await UsuarioRepository.findUserByTime(nomeTime);
+      return user;
    },
    async deleteUserById(id) {
-      return await UsuarioRepository.deleteUserById(id);
+      const user = await UsuarioRepository.deleteUserById(id);
+      return user;
    },
    async deleteUserByName(name) {
       const retorno = await UsuarioRepository.deleteUserByName(name);
 
-     return retorno !== RETORNO_SUCESSO;
+      return retorno !== RETORNO_SUCESSO;
    },
 };

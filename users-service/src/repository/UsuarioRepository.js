@@ -7,21 +7,25 @@ const RETORNO_ERRO_INESPERADO = 3;
 
 module.exports = {
    async addUser(nome, cargo, tecnologias) {
-      return await Usuario.create({
+      const user = await Usuario.create({
          nome,
          cargo,
          tecnologias,
       });
+      return user;
    },
    async findUserByName(name) {
-      return await Usuario.find({ nome: name }, () => {});
+      const user = await Usuario.find({ nome: name }, () => {});
+      return user;
    },
    async findUserById(id) {
-      return await Usuario.findById(id);
+      const user = await Usuario.findById(id);
+      return user;
    },
    async findUserByTime(nomeTime) {
       const time = await Time.find({ nome: nomeTime });
-      return await Usuario.find({ times: time.id });
+      const user = await Usuario.find({ times: time.id });
+      return user;
    },
    async deleteUserById(id) {
       const usuario = Usuario.findById(id);
