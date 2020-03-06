@@ -18,7 +18,7 @@ module.exports = {
          usuario = await UsuarioBusiness.addUser(nome, cargo, tecnologias);
       else
          return response
-            .status(400)
+            .status(304)
             .json({ error: 'Usuario já existente na base de dados' });
 
       return response.status(201).json(usuario);
@@ -30,9 +30,9 @@ module.exports = {
 
       if (retorno)
          return response
-            .status(200)
+            .status(201)
             .json({ error: 'Usuario deletado com sucesso!' });
 
-      return response.status(400).json({ error: 'Usuario não existe' });
+      return response.status(404).json({ error: 'Usuario não existe' });
    },
 };
