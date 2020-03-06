@@ -19,9 +19,7 @@ module.exports = {
       return usuario;
    },
    async findUserByName(name) {
-      const usuario = await UsuarioRepository.findUserByName(name);
-
-      return usuario;
+      return await UsuarioRepository.findUserByName(name);
    },
    async findUserByTime(nomeTime) {
       return await UsuarioRepository.findUserByTime(nomeTime);
