@@ -6,9 +6,7 @@ module.exports = {
    async validarUsuarioExistente(nome) {
       const usuario = await this.findUserByName(nome);
 
-      if (usuario.length > 0) return true;
-
-      return false;
+      return usuario.length > 0;
    },
    async addUser(nome, cargo, tecnologias) {
       const usuario = await UsuarioRepository.addUser(nome, cargo, tecnologias);
