@@ -29,9 +29,7 @@ module.exports = {
       return usuario;
    },
    async deleteUserById(id) {
-      const retorno = await UsuarioRepository.deleteUserById(id);
-
-      return retorno;
+      return await UsuarioRepository.deleteUserById(id);
    },
    async deleteUserByName(name) {
       const retorno = await UsuarioRepository.deleteUserByName(name);
