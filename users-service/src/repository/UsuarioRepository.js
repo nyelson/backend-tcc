@@ -25,9 +25,7 @@ module.exports = {
       return usuario;
    },
    async findUserById(id) {
-      const usuario = await Usuario.findById(id);
-
-      return usuario;
+      return await Usuario.findById(id);
    },
    async findUserByTime(nomeTime) {
       const time = await Time.find({ nome: nomeTime });
