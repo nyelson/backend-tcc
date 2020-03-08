@@ -6,16 +6,16 @@ module.exports = {
 
       const usuario = await UsuarioBusiness.findUserById(id);
 
-      if (!usuario) return response.status(200).json(usuario);
+      if (usuario) return response.status(200).json(usuario);
       return response.status(404).json({ error: 'Usuario não existe' });
    },
    async addUser(request, response) {
       const { nome, cargo, tecnologias } = request.body;
 
-      let usuario = await UsuarioBusiness.validarUsuarioExistente(nome);
+      let usuarioExiste = await UsuarioBusiness.validarUsuarioExistente(nome);
 
-      if (!usuario)
-         usuario = await UsuarioBusiness.addUser(nome, cargo, tecnologias);
+      if (!usuarioExiste)
+         const usuario = await UsuarioBusiness.addUser(nome, cargo, tecnologias);
       else
          return response
             .status(304)
@@ -30,7 +30,7 @@ module.exports = {
 
       if (retorno)
          return response
-            .status(201)
+            .status(204)
             .json({ error: 'Usuario deletado com sucesso!' });
 
       return response.status(404).json({ error: 'Usuario não existe' });
