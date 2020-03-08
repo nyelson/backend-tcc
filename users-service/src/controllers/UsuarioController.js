@@ -1,46 +1,41 @@
-const Usuario = require('../models/Usuario');
+const UsuarioBusiness = require('../business/UsuarioBusiness');
 
 module.exports = {
    async findUser(request, response) {
       const { id } = request.headers;
 
-      const usuario = await Usuario.findById(id);
+      const usuario = await UsuarioBusiness.findUserById(id);
 
-      try {
-         if (!usuario) return response.status(200).json(usuario);
-         return response.status(400).json({ error: 'Usuario não existe' });
-      } catch (error) {
-         return response.status(400).json({ error: 'Usuario não existe' });
-      }
+      if (usuario) return response.status(200).json(usuario);
+      return response.status(404).json({ error: 'Usuario não existe' });
    },
    async addUser(request, response) {
       const { nome, cargo, tecnologias } = request.body;
 
-      const tecnologiasArray = tecnologias
-         .split(',')
-         .map(tecnologia => tecnologia.trim());
+      const usuarioExiste = await UsuarioBusiness.validarUsuarioExistente(nome);
 
-      const usuario = await Usuario.create({
-         nome,
-         cargo,
-         tecnologias: tecnologiasArray,
-      });
-
-      return response.status(200).json(usuario);
+      if (!usuarioExiste) {
+         const usuario = await UsuarioBusiness.addUser(
+            nome,
+            cargo,
+            tecnologias
+         );
+         return response.status(201).json(usuario);
+      }
+      return response
+         .status(304)
+         .json({ error: 'Usuario já existente na base de dados' });
    },
    async deleteUser(request, response) {
       const { id } = request.headers;
 
-      const usuario = await Usuario.findById(id);
+      const retorno = await UsuarioBusiness.deleteUserById(id);
 
-      try {
-         if (!usuario) Usuario.delete(usuario);
-
+      if (retorno)
          return response
-            .status(200)
+            .status(204)
             .json({ error: 'Usuario deletado com sucesso!' });
-      } catch (error) {
-         return response.status(400).json({ error: 'Usuario não existe' });
-      }
+
+      return response.status(404).json({ error: 'Usuario não existe' });
    },
 };

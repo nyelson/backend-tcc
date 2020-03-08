@@ -8,6 +8,7 @@ const ItemSchema = new mongoose.Schema({
    dataCadastro: Date,
    dataInicio: Date,
    dataFinalizacao: Date,
+   usuarioDesignado: { type: mongoose.Types.ObjectId, ref: 'Usuario' },
 });
 
 module.exports = mongoose.model('Item', ItemSchema);
