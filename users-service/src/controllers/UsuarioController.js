@@ -12,16 +12,19 @@ module.exports = {
    async addUser(request, response) {
       const { nome, cargo, tecnologias } = request.body;
 
-      let usuarioExiste = await UsuarioBusiness.validarUsuarioExistente(nome);
+      const usuarioExiste = await UsuarioBusiness.validarUsuarioExistente(nome);
 
-      if (!usuarioExiste)
-         const usuario = await UsuarioBusiness.addUser(nome, cargo, tecnologias);
-      else
-         return response
-            .status(304)
-            .json({ error: 'Usuario já existente na base de dados' });
-
-      return response.status(201).json(usuario);
+      if (!usuarioExiste) {
+         const usuario = await UsuarioBusiness.addUser(
+            nome,
+            cargo,
+            tecnologias
+         );
+         return response.status(201).json(usuario);
+      }
+      return response
+         .status(304)
+         .json({ error: 'Usuario já existente na base de dados' });
    },
    async deleteUser(request, response) {
       const { id } = request.headers;
