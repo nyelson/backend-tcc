@@ -33,7 +33,7 @@ module.exports = {
       if (usuario)
          Usuario.deleteOne(
             {
-               nome: usuario.nome,
+               id: usuario.id,
             },
             err => {
                if (err) return RETORNO_ERRO_INESPERADO;
@@ -49,7 +49,7 @@ module.exports = {
       if (usuario)
          Usuario.deleteOne(
             {
-               nome: usuario.nome,
+               id: usuario.id,
             },
             err => {
                if (err) return RETORNO_ERRO_INESPERADO;
