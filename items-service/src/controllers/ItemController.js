@@ -29,6 +29,10 @@ module.exports = {
    async deleteItem(request, response) {
       const { id } = request.headers;
 
+      const item = await ItemBusiness.findItemById(id);
+
+      if (!item) return response.status(404).json({ erro: 'Item não existe' });
+
       const retorno = await ItemBusiness.deleteItemById(id);
 
       if (retorno)
@@ -36,6 +40,6 @@ module.exports = {
             .status(204)
             .json({ error: 'Item deletado com sucesso!' });
 
-      return response.status(404).json({ error: 'Item não existe' });
+      return response.status(500).json({ error: 'Nenhum item foi deletado' });
    },
 };

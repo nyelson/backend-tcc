@@ -1,12 +1,10 @@
 const ItemRepository = require('../repository/ItemRepository');
 
-const RETORNO_SUCESSO = 1;
-
 module.exports = {
    async validarItemExistente(description) {
       const item = await this.findItemByDescription(description);
 
-      return item.length > 0;
+      return item != null;
    },
    async addItem(descricao, prioridade, dificuldade) {
       const item = await ItemRepository.addItem(
@@ -30,12 +28,6 @@ module.exports = {
    },
    async deleteItemById(id) {
       const retorno = await ItemRepository.deleteItemById(id);
-
-      return retorno !== RETORNO_SUCESSO;
-   },
-   async deleteItemByDescription(description) {
-      const retorno = await ItemRepository.deleteItemByDescription(description);
-
-      return retorno !== RETORNO_SUCESSO;
+      return retorno;
    },
 };
