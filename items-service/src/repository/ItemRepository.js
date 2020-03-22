@@ -24,7 +24,8 @@ module.exports = {
       return item;
    },
    async findItemByUser(nomeUser) {
-      const user = await Usuario.find({ nome: nomeUser });
+      const user = await Usuario.findOne({ nome: nomeUser });
+      if(!user) return new Array();
       const item = await Item.find({ usuarioDesignado: user.id });
       return item;
    },
