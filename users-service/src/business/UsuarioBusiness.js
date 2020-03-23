@@ -1,12 +1,10 @@
 const UsuarioRepository = require('../repository/UsuarioRepository');
 
-const RETORNO_SUCESSO = 1;
-
 module.exports = {
    async validarUsuarioExistente(nome) {
       const usuario = await this.findUserByName(nome);
 
-      return usuario.length > 0;
+      return usuario != null;
    },
    async addUser(nome, cargo, tecnologias) {
       const user = await UsuarioRepository.addUser(nome, cargo, tecnologias);
@@ -25,12 +23,7 @@ module.exports = {
       return user;
    },
    async deleteUserById(id) {
-      const user = await UsuarioRepository.deleteUserById(id);
-      return user;
-   },
-   async deleteUserByName(name) {
-      const retorno = await UsuarioRepository.deleteUserByName(name);
-
-      return retorno !== RETORNO_SUCESSO;
+      const retorno = await UsuarioRepository.deleteUserById(id);
+      return retorno;
    },
 };

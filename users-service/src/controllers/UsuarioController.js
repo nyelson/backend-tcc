@@ -29,6 +29,11 @@ module.exports = {
    async deleteUser(request, response) {
       const { id } = request.headers;
 
+      const usuario = await UsuarioBusiness.findUserById(id);
+
+      if (!usuario)
+         return response.status(404).json({ error: 'Usuario não existe' });
+
       const retorno = await UsuarioBusiness.deleteUserById(id);
 
       if (retorno)
@@ -36,6 +41,8 @@ module.exports = {
             .status(204)
             .json({ error: 'Usuario deletado com sucesso!' });
 
-      return response.status(404).json({ error: 'Usuario não existe' });
+      return response
+         .status(500)
+         .json({ error: 'Nenhum usuario foi deletado' });
    },
 };
