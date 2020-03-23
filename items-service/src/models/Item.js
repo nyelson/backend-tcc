@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const ItemSchema = new mongoose.Schema({
    id: mongoose.Types.ObjectId,
+   titulo: String,
    descricao: String,
    prioridade: Number,
    dificuldade: Number,

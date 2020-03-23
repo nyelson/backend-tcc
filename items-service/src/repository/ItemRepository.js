@@ -2,7 +2,7 @@ const Usuario = require('../models/Usuario');
 const Item = require('../models/Item');
 
 module.exports = {
-   async addItem(descricao, prioridade, dificuldade) {
+   async addItem(titulo, descricao, prioridade, dificuldade) {
       const item = await Item.create({
          descricao,
          prioridade,
@@ -11,8 +11,8 @@ module.exports = {
       });
       return item;
    },
-   async findItemByDescription(description) {
-      const item = await Item.findOne({ descricao: description }, () => {});
+   async findItemByTitulo(titulo) {
+      const item = await Item.findOne({ titulo: titulo }, () => {});
       return item;
    },
    async findItemById(id) {

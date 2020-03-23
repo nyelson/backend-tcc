@@ -1,13 +1,14 @@
 const ItemRepository = require('../repository/ItemRepository');
 
 module.exports = {
-   async validarItemExistente(description) {
-      const item = await this.findItemByDescription(description);
+   async validarItemExistente(titulo) {
+      const item = await this.findItemByTitulo(titulo);
 
       return item != null;
    },
-   async addItem(descricao, prioridade, dificuldade) {
+   async addItem(titulo, descricao, prioridade, dificuldade) {
       const item = await ItemRepository.addItem(
+         titulo,
          descricao,
          prioridade,
          dificuldade
@@ -18,8 +19,8 @@ module.exports = {
       const item = await ItemRepository.findItemById(id);
       return item;
    },
-   async findItemByDescription(description) {
-      const item = await ItemRepository.findItemByDescription(description);
+   async findItemByTitulo(titulo) {
+      const item = await ItemRepository.findItemByTitulo(titulo);
       return item;
    },
    async findItemByUser(nomeUser) {

@@ -10,12 +10,13 @@ module.exports = {
       return response.status(404).json({ error: 'Item não existe' });
    },
    async addItem(request, response) {
-      const { descricao, prioridade, dificuldade } = request.body;
+      const { titulo, descricao, prioridade, dificuldade } = request.body;
 
-      const itemExiste = await ItemBusiness.validarItemExistente(descricao);
+      const itemExiste = await ItemBusiness.validarItemExistente(titulo);
 
       if (!itemExiste) {
          const item = await ItemBusiness.addItem(
+            titulo,
             descricao,
             prioridade,
             dificuldade
