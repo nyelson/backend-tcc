@@ -14,7 +14,9 @@ module.exports = {
    async addUser(request, response) {
       const { nome, email, password, cargo, tecnologias } = request.body;
 
-      const usuarioExiste = await UsuarioBusiness.validarUsuarioExistente(nome);
+      const usuarioExiste = await UsuarioBusiness.validarUsuarioExistente(
+         email
+      );
 
       if (!usuarioExiste) {
          const createdUser = await UsuarioBusiness.addUser(
