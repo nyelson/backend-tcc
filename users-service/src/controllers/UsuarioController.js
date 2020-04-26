@@ -1,6 +1,6 @@
-const UsuarioBusiness = require('../business/UsuarioBusiness');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const UsuarioBusiness = require('../business/UsuarioBusiness');
 
 module.exports = {
    async findUser(request, response) {

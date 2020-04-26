@@ -11,11 +11,13 @@ const UsuarioSchema = new mongoose.Schema({
    times: [{ type: mongoose.Types.ObjectId, ref: 'Time' }],
 });
 
-UsuarioSchema.pre('save', async function(next) {
+async function hashPassword(next) {
    const hash = await bcrypt.hash(this.password, 10);
    this.password = hash;
 
    next();
-});
+}
+
+UsuarioSchema.pre('save', hashPassword);
 
 module.exports = mongoose.model('Usuario', UsuarioSchema);

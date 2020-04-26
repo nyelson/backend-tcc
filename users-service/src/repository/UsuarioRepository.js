@@ -13,11 +13,11 @@ module.exports = {
       return user;
    },
    async findUserByEmail(email) {
-      const user = await Usuario.findOne({ email: email });
+      const user = await Usuario.findOne({ email });
       return user;
    },
    async findUserCredentials(email) {
-      const user = await Usuario.findOne({ email: email }).select('+password');
+      const user = await Usuario.findOne({ email }).select('+password');
       return user;
    },
    async findUserByName(name) {
