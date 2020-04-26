@@ -2,12 +2,22 @@ const Usuario = require('../models/Usuario');
 const Time = require('../models/Time');
 
 module.exports = {
-   async addUser(nome, cargo, tecnologias) {
+   async addUser(nome, email, password, cargo, tecnologias) {
       const user = await Usuario.create({
          nome,
+         email,
+         password,
          cargo,
          tecnologias,
       });
+      return user;
+   },
+   async findUserByEmail(email) {
+      const user = await Usuario.findOne({ email: email });
+      return user;
+   },
+   async findUserCredentials(email) {
+      const user = await Usuario.findOne({ email: email }).select('+password');
       return user;
    },
    async findUserByName(name) {
