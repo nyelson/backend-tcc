@@ -1,40 +1,32 @@
 {
-   "name": "users-service",
+   "name": "bff",
    "version": "1.0.0",
    "main": "index.js",
+   "author": "Ramon Portela Santos",
    "license": "MIT",
    "scripts": {
       "test": "jest --forceExit",
       "test:watch": "jest --watch",
       "test:detect": "jest --detectOpenHandles",
-      "dev": "nodemon ./src/index.js",
+      "dev": "nodemon ./src/server.js",
       "lint": "eslint ./src/**/*.js",
       "lint:fix": "eslint ./src/**/*.js --fix",
       "test-and-lint": "npm run test && npm run lint"
    },
    "dependencies": {
-      "bcryptjs": "^2.4.3",
+      "axios": "^0.19.2",
       "express": "^4.17.1",
-      "jest": "^25.4.0",
-      "jsonwebtoken": "^8.5.1",
-      "mongoose": "^5.9.1"
-   },
-   "husky": {
-      "hooks": {
-         "pre-commit": "npm run test-and-lint"
-      }
+      "jest": "^25.4.0"
    },
    "devDependencies": {
-      "@shelf/jest-mongodb": "^1.1.5",
       "eslint": "^6.8.0",
       "eslint-config-airbnb-base": "^14.0.0",
       "eslint-config-prettier": "^6.10.0",
-      "eslint-plugin-import": "^2.20.2",
-      "eslint-plugin-jest": "^23.8.2",
+      "eslint-plugin-import": "^2.20.1",
+      "eslint-plugin-jest": "^23.8.1",
       "eslint-plugin-prettier": "^3.1.2",
-      "husky": "^4.2.3",
-      "nodemon": "^2.0.2",
-      "prettier": "1.19.1",
-      "supertest": "^4.0.2"
+      "nodemon": "^2.0.3",
+      "prettier": "^2.0.5",
+      "husky": "^4.2.5"
    }
 }
