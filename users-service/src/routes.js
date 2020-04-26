@@ -12,10 +12,10 @@ routes.post(
    UsuarioController.addUser
 );
 routes.post(
-   '/usuarios/singin',
+   '/usuarios/signin',
    Validator.validateRequiredEmailBody,
    Validator.validateRequiredPasswordBody,
-   UsuarioController.singIn
+   UsuarioController.signIn
 );
 routes.get('/usuarios/:id', UsuarioController.findUser);
 routes.delete('/usuarios/delete/:id', UsuarioController.deleteUser);

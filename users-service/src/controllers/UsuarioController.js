@@ -38,7 +38,7 @@ module.exports = {
          .status(304)
          .json({ error: 'Usuario já existente na base de dados' });
    },
-   async singIn(request, response) {
+   async signIn(request, response) {
       const { email, password } = request.body;
       const errorMsg = 'Credenciais incorretas';
 

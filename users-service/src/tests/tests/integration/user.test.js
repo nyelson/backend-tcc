@@ -62,10 +62,10 @@ describe('User Endpoints', () => {
       });
    });
 
-   describe('POST /singin', () => {
+   describe('POST /signin', () => {
       it('should return an error when no email is given', async done => {
          const res = await request(app)
-            .post('/usuarios/singin')
+            .post('/usuarios/signin')
             .send({ password: '123' });
          expect(res.statusCode).toEqual(400);
          expect(res.body).toHaveProperty('erro');
@@ -75,7 +75,7 @@ describe('User Endpoints', () => {
 
       it('should return an error when no password is given', async done => {
          const res = await request(app)
-            .post('/usuarios/singin')
+            .post('/usuarios/signin')
             .send({ email: 'abc@abc.com' });
          expect(res.statusCode).toEqual(400);
          expect(res.body).toHaveProperty('erro');
@@ -87,7 +87,7 @@ describe('User Endpoints', () => {
          await UserRepository.addUser('test', 'abc@abc.com', '123');
 
          const res = await request(app)
-            .post('/usuarios/singin')
+            .post('/usuarios/signin')
             .send({ email: 'test@test.com', password: '123' });
          expect(res.statusCode).toEqual(404);
          expect(res.body).toHaveProperty('erro');
@@ -99,7 +99,7 @@ describe('User Endpoints', () => {
          await UserRepository.addUser('test', 'abc@abc.com', '123');
 
          const res = await request(app)
-            .post('/usuarios/singin')
+            .post('/usuarios/signin')
             .send({ email: 'test@test.com', password: '321' });
          expect(res.statusCode).toEqual(404);
          expect(res.body).toHaveProperty('erro');
@@ -111,7 +111,7 @@ describe('User Endpoints', () => {
          await UserRepository.addUser('test', 'abc@abc.com', '123');
 
          const res = await request(app)
-            .post('/usuarios/singin')
+            .post('/usuarios/signin')
             .send({ email: 'abc@abc.com', password: '123' });
          expect(res.statusCode).toEqual(200);
          expect(res.body).toHaveProperty('token');
