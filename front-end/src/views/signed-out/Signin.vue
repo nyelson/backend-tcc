@@ -24,6 +24,7 @@
               v-model="password"
               :disabled="loading"
               :loading="loading"
+              :error-messages="passwordErrorMessage"
             ></v-text-field>
           </v-card-text>
           <v-card-actions class="actions">
@@ -85,6 +86,12 @@ export default {
           .catch((err) => {
             if (err.status === 304) {
               this.emailErrorMessage = "E-mail já registrado";
+              return;
+            }
+            if (err.status === 404) {
+              const errorMessage = "Credenciais Incorretas!";
+              this.emailErrorMessage = errorMessage;
+              this.passwordErrorMessage = errorMessage;
             }
           })
           .finally(() => (this.loading = false));
