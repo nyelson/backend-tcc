@@ -1,0 +1,32 @@
+{
+   "name": "bff",
+   "version": "1.0.0",
+   "main": "index.js",
+   "author": "Ramon Portela Santos",
+   "license": "MIT",
+   "scripts": {
+      "test": "jest --forceExit",
+      "test:watch": "jest --watch",
+      "test:detect": "jest --detectOpenHandles",
+      "dev": "nodemon ./src/server.js",
+      "lint": "eslint ./src/**/*.js",
+      "lint:fix": "eslint ./src/**/*.js --fix",
+      "test-and-lint": "npm run test && npm run lint"
+   },
+   "dependencies": {
+      "axios": "^0.19.2",
+      "express": "^4.17.1",
+      "jest": "^25.4.0"
+   },
+   "devDependencies": {
+      "eslint": "^6.8.0",
+      "eslint-config-airbnb-base": "^14.0.0",
+      "eslint-config-prettier": "^6.10.0",
+      "eslint-plugin-import": "^2.20.1",
+      "eslint-plugin-jest": "^23.8.1",
+      "eslint-plugin-prettier": "^3.1.2",
+      "nodemon": "^2.0.3",
+      "prettier": "^2.0.5",
+      "husky": "^4.2.5"
+   }
+}
