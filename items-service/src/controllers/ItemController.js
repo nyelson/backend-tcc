@@ -2,15 +2,40 @@ const ItemBusiness = require('../business/ItemBusiness');
 
 module.exports = {
    async findItem(request, response) {
-      const { id } = request.headers;
+      const { id } = request.params;
 
       const item = await ItemBusiness.findItemById(id);
 
       if (item) return response.status(200).json(item);
       return response.status(404).json({ error: 'Item não existe' });
    },
+
+   async findItemByTeam(request, response) {
+      const { teamId } = request.params;
+
+      const item = await ItemBusiness.findItemByTeam(teamId);
+
+      if (item) return response.status(200).json(item);
+      return response.status(404).json({ error: 'Item não existe' });
+   },
+
+   async findItemByUser(request, response) {
+      const { userId } = request.params;
+
+      const item = await ItemBusiness.findItemByUser(userId);
+
+      if (item) return response.status(200).json(item);
+      return response.status(404).json({ error: 'Item não existe' });
+   },
    async addItem(request, response) {
-      const { titulo, descricao, prioridade, dificuldade } = request.body;
+      const {
+         titulo,
+         descricao,
+         prioridade,
+         dificuldade,
+         timeResponsavel,
+         usuarioDesignado,
+      } = request.body;
 
       const itemExiste = await ItemBusiness.validarItemExistente(titulo);
 
@@ -19,7 +44,9 @@ module.exports = {
             titulo,
             descricao,
             prioridade,
-            dificuldade
+            dificuldade,
+            timeResponsavel,
+            usuarioDesignado
          );
          return response.status(201).json(item);
       }
