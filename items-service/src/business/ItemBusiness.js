@@ -6,12 +6,21 @@ module.exports = {
 
       return item != null;
    },
-   async addItem(titulo, descricao, prioridade, dificuldade) {
+   async addItem(
+      titulo,
+      descricao,
+      prioridade,
+      dificuldade,
+      timeResponsavel,
+      usuarioDesignado
+   ) {
       const item = await ItemRepository.addItem(
          titulo,
          descricao,
          prioridade,
-         dificuldade
+         dificuldade,
+         timeResponsavel,
+         usuarioDesignado
       );
       return item;
    },
@@ -19,12 +28,16 @@ module.exports = {
       const item = await ItemRepository.findItemById(id);
       return item;
    },
-   async findItemByTitulo(titulo) {
-      const item = await ItemRepository.findItemByTitulo(titulo);
+   async findItemByTeam(teamId) {
+      const item = await ItemRepository.findItemByTeam(teamId);
       return item;
    },
-   async findItemByUser(nomeUser) {
-      const item = await ItemRepository.findItemByUser(nomeUser);
+   async findItemByUser(userId) {
+      const item = await ItemRepository.findItemByUser(userId);
+      return item;
+   },
+   async findItemByTitulo(titulo) {
+      const item = await ItemRepository.findItemByTitulo(titulo);
       return item;
    },
    async deleteItemById(id) {
