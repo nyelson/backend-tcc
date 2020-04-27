@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Usuario = require('../models/Usuario');
-const Time = require('../models/Time');
+require('../models/Usuario');
+require('../models/Time');
 const Item = require('../models/Item');
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
       return item;
    },
    async findItemByTitulo(titulo) {
-      const item = await Item.findOne({ titulo: titulo }, () => {});
+      const item = await Item.findOne({ titulo }, () => {});
       return item;
    },
    async findItemById(id) {

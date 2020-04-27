@@ -40,10 +40,6 @@ module.exports = {
       const item = await ItemRepository.findItemByTitulo(titulo);
       return item;
    },
-   async findItemByUser(nomeUser) {
-      const item = await ItemRepository.findItemByUser(nomeUser);
-      return item;
-   },
    async deleteItemById(id) {
       const retorno = await ItemRepository.deleteItemById(id);
       return retorno;
