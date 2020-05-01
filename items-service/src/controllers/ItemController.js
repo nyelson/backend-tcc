@@ -10,21 +10,37 @@ module.exports = {
       return response.status(404).json({ error: 'Item não existe' });
    },
 
+   async findItemByTeams(request, response) {
+      if (!(request.query && request.query.teamsIds))
+         return response
+            .status(400)
+            .json({ erro: 'Parametros obrigatórios não preenchidos' });
+
+      const { teamsIds: query } = request.query;
+
+      const teamsIds = Array.isArray(query) ? query : [query];
+
+      const items = await ItemBusiness.findItemByTeams(teamsIds);
+
+      if (items) return response.status(200).json(items);
+      return response.status(404).json({ error: 'Item não existe' });
+   },
+
    async findItemByTeam(request, response) {
       const { teamId } = request.params;
 
-      const item = await ItemBusiness.findItemByTeam(teamId);
+      const items = await ItemBusiness.findItemByTeam(teamId);
 
-      if (item) return response.status(200).json(item);
+      if (items) return response.status(200).json(items);
       return response.status(404).json({ error: 'Item não existe' });
    },
 
    async findItemByUser(request, response) {
       const { userId } = request.params;
 
-      const item = await ItemBusiness.findItemByUser(userId);
+      const items = await ItemBusiness.findItemByUser(userId);
 
-      if (item) return response.status(200).json(item);
+      if (items) return response.status(200).json(items);
       return response.status(404).json({ error: 'Item não existe' });
    },
    async addItem(request, response) {
