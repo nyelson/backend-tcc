@@ -36,6 +36,21 @@ module.exports = {
          .populate({ path: 'timeResponsavel', select: 'nome' });
       return item;
    },
+   async findItemByTeams(teamsIds) {
+      const items = await Item.find({
+         timeResponsavel: {
+            $in: teamsIds
+               .filter(teamId => mongoose.Types.ObjectId.isValid(teamId))
+               .map(teamId => mongoose.Types.ObjectId(teamId)),
+         },
+      })
+         .populate({
+            path: 'usuarioDesignado',
+            select: 'nome email',
+         })
+         .populate({ path: 'timeResponsavel', select: 'nome' });
+      return items;
+   },
    async findItemByTeam(teamId) {
       const items = await Item.find({
          timeResponsavel: mongoose.Types.ObjectId(teamId),

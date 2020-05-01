@@ -28,6 +28,10 @@ module.exports = {
       const item = await ItemRepository.findItemById(id);
       return item;
    },
+   async findItemByTeams(teamsIds) {
+      const item = await ItemRepository.findItemByTeams(teamsIds);
+      return item;
+   },
    async findItemByTeam(teamId) {
       const item = await ItemRepository.findItemByTeam(teamId);
       return item;
