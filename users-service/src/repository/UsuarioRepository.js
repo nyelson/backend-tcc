@@ -25,6 +25,7 @@ module.exports = {
       return user;
    },
    async findUserById(id) {
+      console.log(id);
       const user = await Usuario.findById(id);
       return user;
    },
