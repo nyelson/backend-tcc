@@ -39,7 +39,9 @@ module.exports = {
    async findItemByTeams(teamsIds) {
       const items = await Item.find({
          timeResponsavel: {
-            $in: teamsIds.map(teamId => mongoose.Types.ObjectId(teamId)),
+            $in: teamsIds
+               .filter(teamId => mongoose.Types.ObjectId.isValid(teamId))
+               .map(teamId => mongoose.Types.ObjectId(teamId)),
          },
       })
          .populate({

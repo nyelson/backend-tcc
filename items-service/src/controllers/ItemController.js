@@ -11,7 +11,14 @@ module.exports = {
    },
 
    async findItemByTeams(request, response) {
-      const { teamsIds } = request.params;
+      if (!(request.query && request.query.teamsIds))
+         return response
+            .status(400)
+            .json({ erro: 'Parametros obrigatórios não preenchidos' });
+
+      const { teamsIds: query } = request.query;
+
+      const teamsIds = Array.isArray(query) ? query : [query];
 
       const items = await ItemBusiness.findItemByTeams(teamsIds);
 
