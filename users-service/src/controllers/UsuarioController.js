@@ -4,7 +4,7 @@ const UsuarioBusiness = require('../business/UsuarioBusiness');
 
 module.exports = {
    async findUser(request, response) {
-      const { id } = request.headers;
+      const { id } = request.params;
 
       const usuario = await UsuarioBusiness.findUserById(id);
 
@@ -69,7 +69,7 @@ module.exports = {
       return response.status(200).json({ usuario: returnUser, token });
    },
    async deleteUser(request, response) {
-      const { id } = request.headers;
+      const { id } = request.params;
 
       const usuario = await UsuarioBusiness.findUserById(id);
 
