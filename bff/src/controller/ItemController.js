@@ -1,4 +1,5 @@
 const axios = require('axios');
+const itemsLogic = require('../logic/item');
 
 const fetchItems = (teams, page, itemsPerPage) =>
    axios.get(
@@ -13,6 +14,7 @@ const fetchTotalRecords = (teams) =>
          .map((team) => `teamsIds=${team}`)
          .join('&')}`
    );
+
 const findItemsByUser = async (req, res) => {
    const { times: teams } = req.user;
    const { page, itemsPerPage } = req.query;
@@ -28,8 +30,10 @@ const findItemsByUser = async (req, res) => {
          fetchTotalRecords(teams),
       ]);
 
-      return res.status(200).json({ items, totalRecords });
+      const formatedItems = itemsLogic.formatItems(items);
+      return res.status(200).json({ items: formatedItems, totalRecords });
    } catch (err) {
+      console.error(err);
       if (err.response) {
          return res.status(err.response.status).json(err.response.data);
       }
