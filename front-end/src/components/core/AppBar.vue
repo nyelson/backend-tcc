@@ -1,26 +1,13 @@
 <template>
   <v-app-bar id="app-bar" absolute app color="transparent" flat height="75">
     <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
-    <v-btn
-      v-for="item in itens"
-      :key="item.name"
-      :to="item.href"
-      class="ml-2"
-      min-width="0"
-      text
-    >
+    <v-btn v-for="item in itens" :key="item.name" :to="item.href" class="ml-2" min-width="0" text>
       <v-icon>{{ item.icon }}</v-icon>
     </v-btn>
 
     <v-spacer />
 
-    <v-menu
-      bottom
-      left
-      offset-y
-      origin="top right"
-      transition="scale-transition"
-    >
+    <v-menu bottom left offset-y origin="top right" transition="scale-transition">
       <template v-slot:activator="{ attrs, on }">
         <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
           <v-icon>mdi-account</v-icon>
@@ -31,7 +18,7 @@
           <v-list-item
             :dark="hover"
             :link="true"
-            activeClass=""
+            activeClass
             :class="{
               'black--text': !hover,
               'white--text secondary elevation-12': hover,
@@ -45,7 +32,7 @@
             :dark="hover"
             :link="true"
             @click="logout"
-            activeClass=""
+            activeClass
             :class="{
               'black--text': !hover,
               'white--text secondary elevation-12': hover,
@@ -70,19 +57,19 @@ export default {
       {
         icon: "mdi-clipboard-outline",
         name: "Itens",
-        href: "/dashboard/tracker",
+        href: "/dashboard/tracker"
       },
       {
         icon: "mdi-view-dashboard",
         name: "Dashboard",
-        href: "/dashboard/dashboard",
-      },
-    ],
+        href: "/dashboard/dashboard"
+      }
+    ]
   }),
   methods: {
     logout() {
-      this.$store.dispatch("logout");
-    },
-  },
+      this.$store.dispatch("authentication/logout");
+    }
+  }
 };
 </script>

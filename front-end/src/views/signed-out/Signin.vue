@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="bg-gradient">
     <v-row class="full-height" align="center" justify="center">
-      <v-form @submit.prevent="login" v-model="valid" ref="form">
+      <v-form @submit.prevent="signin" v-model="valid" ref="form">
         <v-card class="sign-up-card">
           <v-card-title>Entrar</v-card-title>
           <v-card-text>
@@ -30,14 +30,13 @@
           <v-card-actions class="actions">
             <v-container>
               <v-row align="center" justify="center">
-                <v-btn type="submit" color="primary" :disabled="loading"
-                  >Entrar</v-btn
-                >
+                <v-btn type="submit" color="primary" :disabled="loading">Entrar</v-btn>
               </v-row>
               <v-row align="center" justify="center">
-                <router-link class="redirect-link" to="/signup">
-                  Novo por aqui? Crie uma nova conta clicando aqui.
-                </router-link>
+                <router-link
+                  class="redirect-link"
+                  to="/signup"
+                >Novo por aqui? Crie uma nova conta clicando aqui.</router-link>
               </v-row>
             </v-container>
           </v-card-actions>
@@ -48,6 +47,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "SignIn",
   data: () => ({
@@ -60,30 +61,30 @@ export default {
     password: "",
     passwordConfim: "",
     rules: {
-      required: (value) => !!value || "Campo obrigatório.",
-      minValue: (value) =>
+      required: value => !!value || "Campo obrigatório.",
+      minValue: value =>
         value.length > 5 || "A senha deve conter pelo menos 6 caracteres",
-      email: (value) => {
+      email: value => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return pattern.test(value) || "E-mail inválido.";
-      },
-    },
+      }
+    }
   }),
   methods: {
-    async login() {
+    ...mapActions("authentication", ["login"]),
+    async signin() {
       this.emailErrorMessage = "";
       this.passwordErrorMessage = "";
       await this.$nextTick();
       this.$refs.form.validate();
       if (this.valid) {
         this.loading = true;
-        this.$store
-          .dispatch("login", {
-            email: this.email,
-            password: this.password,
-          })
+        this.login({
+          email: this.email,
+          password: this.password
+        })
           .then(() => this.$router.push({ name: "DashBoard" }))
-          .catch((err) => {
+          .catch(err => {
             if (err.status === 304) {
               this.emailErrorMessage = "E-mail já registrado";
               return;
@@ -96,8 +97,8 @@ export default {
           })
           .finally(() => (this.loading = false));
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
