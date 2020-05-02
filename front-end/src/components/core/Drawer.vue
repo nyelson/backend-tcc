@@ -1,15 +1,15 @@
 <template>
-  <v-navigation-drawer id="drawer" v-model="drawer" dark app mobile-break-point="960" width="260">
+  <v-navigation-drawer id="drawer" :value="drawer" dark app mobile-break-point="960" width="260">
     <v-list>
       <v-list-item>
-        <v-list-item-avatar class="align-self-center" color="blue" contain>
+        <v-list-item-avatar class="align-self-center uppercase" color="blue" contain>
           {{
           projectInitials
           }}
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title class="display-1" v-text="projectName" />
+          <v-list-item-title class="display-1 captalized" v-text="user.usuario.nome" />
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -27,11 +27,11 @@
   </v-navigation-drawer>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "DashboardCoreDrawer",
   data: () => ({
-    projectName: "Projeto X",
-    drawer: true,
     itens: [
       {
         icon: "mdi-clipboard-outline",
@@ -46,8 +46,10 @@ export default {
     ]
   }),
   computed: {
+    ...mapState(["drawer"]),
+    ...mapState("authentication", ["user"]),
     projectInitials() {
-      return this.projectName
+      return this.user.usuario.nome
         .split(" ")
         .map(word => word.substring(0, 1))
         .join("");
@@ -55,3 +57,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.uppercase {
+  text-transform: uppercase;
+}
+.captalized {
+  text-transform: capitalize;
+}
+</style>

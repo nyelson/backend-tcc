@@ -1,5 +1,8 @@
 <template>
   <v-app-bar id="app-bar" absolute app color="transparent" flat height="75">
+    <v-btn class="mr-3" elevation="1" fab small @click="toggleDrawer(!drawer)">
+      <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
     <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
     <v-btn v-for="item in itens" :key="item.name" :to="item.href" class="ml-2" min-width="0" text>
       <v-icon>{{ item.icon }}</v-icon>
@@ -50,6 +53,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "DashboardCoreAppBar",
   data: () => ({
@@ -66,10 +71,10 @@ export default {
       }
     ]
   }),
+  computed: mapState(["drawer"]),
   methods: {
-    logout() {
-      this.$store.dispatch("authentication/logout");
-    }
+    ...mapActions(["toggleDrawer"]),
+    ...mapActions("authentication", ["logout"])
   }
 };
 </script>

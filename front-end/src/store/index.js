@@ -11,7 +11,17 @@ export default new Vuex.Store({
     authentication,
     items,
   },
-  state: {},
-  mutations: {},
-  actions: {},
+  state: {
+    drawer: true,
+  },
+  mutations: {
+    TOGGLE_DRAWER(state, isToggled) {
+      state.drawer = isToggled;
+    },
+  },
+  actions: {
+    toggleDrawer({ commit }, isToggled) {
+      commit("TOGGLE_DRAWER", isToggled);
+    },
+  },
 });
