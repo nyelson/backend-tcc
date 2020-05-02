@@ -24,7 +24,10 @@ export const actions = {
       .post("//localhost:3330/authentication/signup", credentials)
       .then(() => {
         const { email, password } = credentials;
-        return dispatch("login", { email, password });
+        return dispatch("authentication/authentication/login", {
+          email,
+          password,
+        });
       })
       .catch((err) => {
         throw err.response;
