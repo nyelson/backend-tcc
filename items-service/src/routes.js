@@ -1,4 +1,6 @@
 const { Router } = require('express');
+const searchByTeamValidation = require('./middleware/search-by-teams-validation');
+const paginationValidation = require('./middleware/pagination-validation');
 const ItemController = require('./controllers/ItemController');
 
 const routes = Router();
@@ -8,9 +10,21 @@ routes.get('/items');
 routes.get('/item/:id', ItemController.findItem);
 routes.delete('/items/delete/:id', ItemController.deleteItem);
 
-routes.get('/items/teams', ItemController.findItemByTeams);
-routes.get('/items/team/:teamId', ItemController.findItemByTeam);
+routes.get(
+   '/items/teams',
+   searchByTeamValidation,
+   paginationValidation.validatePaginationQueryParams,
+   ItemController.findItemsByTeams
+);
 
-routes.get('/items/user/:userId', ItemController.findItemByUser);
+routes.get(
+   '/items/teams/count',
+   searchByTeamValidation,
+   ItemController.findItemsByTeamsTotalRecords
+);
+
+routes.get('/items/team/:teamId', ItemController.findItemsByTeam);
+
+routes.get('/items/user/:userId', ItemController.findItemsByUser);
 
 module.exports = routes;

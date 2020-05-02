@@ -28,16 +28,31 @@ module.exports = {
       const item = await ItemRepository.findItemById(id);
       return item;
    },
-   async findItemByTeams(teamsIds) {
-      const item = await ItemRepository.findItemByTeams(teamsIds);
+   async findItemsByTeams(teamsIds) {
+      const item = await ItemRepository.findItemsByTeams(teamsIds);
       return item;
    },
-   async findItemByTeam(teamId) {
-      const item = await ItemRepository.findItemByTeam(teamId);
+
+   async findItemsByTeamsTotalRecords(teamsIds) {
+      const totalRecords = await ItemRepository.findItemsByTeamsTotalRecords(
+         teamsIds
+      );
+      return totalRecords;
+   },
+   async findItemsByTeamsPaginated(teamsIds, page, itemsPerPage) {
+      const item = await ItemRepository.findItemsByTeamsPaginated(
+         teamsIds,
+         page,
+         itemsPerPage
+      );
       return item;
    },
-   async findItemByUser(userId) {
-      const item = await ItemRepository.findItemByUser(userId);
+   async findItemsByTeam(teamId) {
+      const item = await ItemRepository.findItemsByTeam(teamId);
+      return item;
+   },
+   async findItemsByUser(userId) {
+      const item = await ItemRepository.findItemsByUser(userId);
       return item;
    },
    async findItemByTitulo(titulo) {

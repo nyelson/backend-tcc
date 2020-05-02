@@ -10,38 +10,49 @@ module.exports = {
       return response.status(404).json({ error: 'Item não existe' });
    },
 
-   async findItemByTeams(request, response) {
-      if (!(request.query && request.query.teamsIds))
-         return response
-            .status(400)
-            .json({ erro: 'Parametros obrigatórios não preenchidos' });
+   async findItemsByTeams(request, response) {
+      const { teamsIds: query, page, itemsPerPage } = request.query;
 
+      const teamsIds = Array.isArray(query) ? query : [query];
+
+      if (page != null && itemsPerPage != null) {
+         const items = await ItemBusiness.findItemsByTeamsPaginated(
+            teamsIds,
+            parseInt(page, 10),
+            parseInt(itemsPerPage, 10)
+         );
+         return response.status(200).json(items);
+      }
+
+      const items = await ItemBusiness.findItemsByTeams(teamsIds);
+      return response.status(200).json(items);
+   },
+
+   async findItemsByTeamsTotalRecords(request, response) {
       const { teamsIds: query } = request.query;
 
       const teamsIds = Array.isArray(query) ? query : [query];
 
-      const items = await ItemBusiness.findItemByTeams(teamsIds);
-
-      if (items) return response.status(200).json(items);
-      return response.status(404).json({ error: 'Item não existe' });
+      const totalRecords = await ItemBusiness.findItemsByTeamsTotalRecords(
+         teamsIds
+      );
+      return response.status(200).json({ totalRecords });
    },
 
-   async findItemByTeam(request, response) {
+   async findItemsByTeam(request, response) {
       const { teamId } = request.params;
 
-      const items = await ItemBusiness.findItemByTeam(teamId);
+      const items = await ItemBusiness.findItemsByTeam(teamId);
 
-      if (items) return response.status(200).json(items);
-      return response.status(404).json({ error: 'Item não existe' });
+      return response.status(200).json(items);
    },
 
-   async findItemByUser(request, response) {
+   async findItemsByUser(request, response) {
       const { userId } = request.params;
 
-      const items = await ItemBusiness.findItemByUser(userId);
+      const items = await ItemBusiness.findItemsByUser(userId);
 
-      if (items) return response.status(200).json(items);
-      return response.status(404).json({ error: 'Item não existe' });
+      return response.status(200).json(items);
    },
    async addItem(request, response) {
       const {
