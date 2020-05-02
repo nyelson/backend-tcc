@@ -36,7 +36,7 @@ module.exports = {
          .populate({ path: 'timeResponsavel', select: 'nome' });
       return item;
    },
-   async findItemByTeams(teamsIds) {
+   async findItemsByTeams(teamsIds) {
       const items = await Item.find({
          timeResponsavel: {
             $in: teamsIds
@@ -51,7 +51,39 @@ module.exports = {
          .populate({ path: 'timeResponsavel', select: 'nome' });
       return items;
    },
-   async findItemByTeam(teamId) {
+   async findItemsByTeamsTotalRecords(teamsIds) {
+      const totalRecords = await Item.countDocuments({
+         timeResponsavel: {
+            $in: teamsIds
+               .filter(teamId => mongoose.Types.ObjectId.isValid(teamId))
+               .map(teamId => mongoose.Types.ObjectId(teamId)),
+         },
+      });
+
+      return totalRecords;
+   },
+   async findItemsByTeamsPaginated(teamsIds, page, itemsPerPage) {
+      const items = await Item.aggregate([
+         {
+            $match: {
+               timeResponsavel: {
+                  $in: teamsIds
+                     .filter(teamId => mongoose.Types.ObjectId.isValid(teamId))
+                     .map(teamId => mongoose.Types.ObjectId(teamId)),
+               },
+            },
+         },
+         { $skip: (page - 1) * itemsPerPage },
+         { $limit: itemsPerPage },
+      ]);
+      await Item.populate(items, {
+         path: 'usuarioDesignado',
+         select: 'nome email',
+      });
+      await Item.populate(items, { path: 'timeResponsavel', select: 'nome' });
+      return items;
+   },
+   async findItemsByTeam(teamId) {
       const items = await Item.find({
          timeResponsavel: mongoose.Types.ObjectId(teamId),
       })
@@ -62,7 +94,7 @@ module.exports = {
          .populate({ path: 'timeResponsavel', select: 'nome' });
       return items;
    },
-   async findItemByUser(userId) {
+   async findItemsByUser(userId) {
       const items = await Item.find({
          usuarioDesignado: mongoose.Types.ObjectId(userId),
       })
