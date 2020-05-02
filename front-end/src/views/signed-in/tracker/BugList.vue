@@ -10,9 +10,9 @@
         <v-card>
           <v-data-table
             :headers="headers"
-            :items="bugs"
+            :items="items"
             :options.sync="options"
-            :server-items-length="totalBugs"
+            :server-items-length="totalItems"
             :loading="loading"
             class="elevation-1"
           ></v-data-table>
@@ -23,53 +23,38 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "BugList",
   data: () => ({
     options: {},
     loading: true,
-    bugs: [],
-    totalBugs: 0,
     headers: [
-      { text: "teste", value: "teste", sortable: false },
-      { text: "teste1", value: "teste1", sortable: false },
-      { text: "teste2", value: "teste2" }
+      { text: "Título", value: "titulo", sortable: false },
+      { text: "Descrição", value: "descricao", sortable: false },
+      { text: "Prioridade", value: "prioridade" }
     ]
   }),
   watch: {
     options: {
-      handler(newValue, oldValue) {
-        console.log({ newValue, oldValue });
-        this.getDataFromApi().then(data => {
-          console.log(data);
-          this.bugs = data.itens;
-          this.totalBugs = data.totalItens;
-        });
+      handler(newValue) {
+        const { page, itemsPerPage } = newValue;
+        this.getDataFromApi({ page, itemsPerPage });
       },
       deep: true
     }
   },
+  computed: {
+    ...mapState("items", ["items", "totalItems"])
+  },
   methods: {
-    getDataFromApi() {
-      this.loading = false;
-      return new Promise(resolve => {
-        //const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-
-        const itens = [
-          {
-            teste: "primeiro teste",
-            teste1: "primeiro teste",
-            teste2: "primeiro teste"
-          }
-        ];
-
-        const totalItens = itens.length;
-
-        setTimeout(() => {
-          this.loading = false;
-          resolve({ itens, totalItens });
-        }, 3500);
-      });
+    ...mapActions("items", ["fetchItems"]),
+    getDataFromApi({ page, itemsPerPage }) {
+      this.loading = true;
+      this.fetchItems({ page: page, itemsPerPage: itemsPerPage }).then(
+        () => (this.loading = false)
+      );
     }
   }
 };
