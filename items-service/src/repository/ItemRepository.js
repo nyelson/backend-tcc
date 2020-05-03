@@ -195,8 +195,6 @@ module.exports = {
          $match: match,
       };
 
-      console.log(match);
-
       query.push(filter);
 
       const pagination = [
@@ -208,7 +206,6 @@ module.exports = {
 
       const items = await Item.aggregate(query);
 
-      console.log(items);
       return items;
    },
 
