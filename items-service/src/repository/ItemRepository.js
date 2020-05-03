@@ -3,7 +3,7 @@ require('../models/Usuario');
 require('../models/Time');
 const Item = require('../models/Item');
 
-const normalizeCustomFilter = customFilter => (acc, cur) => {
+const normalizeCustomFilter = (customFilter, lookByRef) => (acc, cur) => {
    if (customFilter[cur] == null) return acc;
    if (cur === 'titulo' || cur === 'descricao') {
       const regex = new RegExp(`^${customFilter[cur]}`, 'gi');
@@ -12,8 +12,11 @@ const normalizeCustomFilter = customFilter => (acc, cur) => {
    }
 
    if (cur === 'timeResponsavel' || cur === 'usuarioDesignado') {
-      if (mongoose.Types.ObjectId.isValid(customFilter[cur]))
-         acc[cur] = mongoose.Types.ObjectId(customFilter[cur]);
+      if (mongoose.Types.ObjectId.isValid(customFilter[cur])) {
+         if (lookByRef)
+            acc[`${cur}._id`] = mongoose.Types.ObjectId(customFilter[cur]);
+         else acc[cur] = mongoose.Types.ObjectId(customFilter[cur]);
+      }
       return acc;
    }
 
@@ -172,7 +175,7 @@ module.exports = {
       const query = [...mountQuery()];
 
       const match = Object.keys(customFilter).reduce(
-         normalizeCustomFilter(customFilter),
+         normalizeCustomFilter(customFilter, true),
          {}
       );
 
@@ -192,6 +195,8 @@ module.exports = {
          $match: match,
       };
 
+      console.log(match);
+
       query.push(filter);
 
       const pagination = [
@@ -202,6 +207,8 @@ module.exports = {
       query.push(...pagination);
 
       const items = await Item.aggregate(query);
+
+      console.log(items);
       return items;
    },
 
