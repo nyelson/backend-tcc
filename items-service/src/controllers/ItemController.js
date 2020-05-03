@@ -11,11 +11,11 @@ module.exports = {
    },
 
    async findItemsByTeams(request, response) {
-      let sort = {};
-      let customFilter = {};
+      const sort = {};
+      const customFilter = {};
       const { teamsIds: query, page, itemsPerPage } = request.query;
       ({ sortBy: sort.by, sortOrder: sort.order } = request.query);
-      sort.order = parseInt(sort.order);
+      sort.order = parseInt(sort.order, 10);
       ({
          titulo: customFilter.titulo,
          descricao: customFilter.descricao,

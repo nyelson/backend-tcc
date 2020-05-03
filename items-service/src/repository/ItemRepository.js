@@ -18,7 +18,7 @@ const normalizeCustomFilter = customFilter => (acc, cur) => {
    }
 
    if (cur === 'prioridade' || cur === 'dificuldade') {
-      acc[cur] = parseInt(customFilter[cur]);
+      acc[cur] = parseInt(customFilter[cur], 10);
       return acc;
    }
 

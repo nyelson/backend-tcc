@@ -27,7 +27,7 @@ const validateSortingQueryParams = async (request, response, next) => {
       sortBy == null ||
       sortOrder == null ||
       Number.isNaN(parsedSortOrder) ||
-      (parsedSortOrder != 1 && parsedSortOrder != -1)
+      (parsedSortOrder !== 1 && parsedSortOrder !== -1)
    )
       return response
          .status(400)
