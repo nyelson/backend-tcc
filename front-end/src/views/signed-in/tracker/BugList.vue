@@ -1,11 +1,7 @@
 <template>
   <v-container id="bug-list" fluid tag="section">
+    <dash-board-filter />
     <v-row>
-      <v-col cols="12">
-        <v-card>
-          <v-card-text>AQUI VAI TER A LISTA DE BUGS!</v-card-text>
-        </v-card>
-      </v-col>
       <v-col cols="12">
         <v-card>
           <v-data-table
@@ -27,20 +23,33 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   name: "BugList",
+  components: {
+    DashBoardFilter: () =>
+      import("../../../components/dashboard/tracker/FilterBugs")
+  },
   data: () => ({
     options: {},
     loading: true,
     headers: [
       { text: "Título", value: "titulo", sortable: false },
       { text: "Descrição", value: "descricao", sortable: false },
-      { text: "Prioridade", value: "prioridade" }
+      { text: "Prioridade", value: "prioridade" },
+      { text: "Data de Criação", value: "dataCadastro" },
+      { text: "Severidade", value: "dificuldade" },
+      { text: "Usuário Designado", value: "usuarioDesignado" },
+      { text: "Time Responsável", value: "timeResponsavel" }
     ]
   }),
   watch: {
     options: {
       handler(newValue) {
-        const { page, itemsPerPage } = newValue;
-        this.getDataFromApi({ page, itemsPerPage });
+        const {
+          page,
+          itemsPerPage,
+          sortBy: [sortBy],
+          sortDesc: [isDesc]
+        } = newValue;
+        this.getDataFromApi({ page, itemsPerPage, sortBy, isDesc });
       },
       deep: true
     }
@@ -50,9 +59,9 @@ export default {
   },
   methods: {
     ...mapActions("items", ["fetchItems"]),
-    getDataFromApi({ page, itemsPerPage }) {
+    getDataFromApi({ page, itemsPerPage, sortBy, isDesc }) {
       this.loading = true;
-      this.fetchItems({ page: page, itemsPerPage: itemsPerPage }).then(
+      this.fetchItems({ page, itemsPerPage, sortBy, isDesc }).then(
         () => (this.loading = false)
       );
     }
