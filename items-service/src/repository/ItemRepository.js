@@ -160,7 +160,6 @@ module.exports = {
       query.push(...pagination);
 
       const items = await Item.aggregate(query);
-
       return items;
    },
 
@@ -203,7 +202,6 @@ module.exports = {
       query.push(...pagination);
 
       const items = await Item.aggregate(query);
-
       return items;
    },
 
