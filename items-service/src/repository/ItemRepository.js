@@ -3,7 +3,7 @@ require('../models/Usuario');
 require('../models/Time');
 const Item = require('../models/Item');
 
-const normalizeCustomFilter = customFilter => (acc, cur) => {
+const normalizeCustomFilter = (customFilter, lookByRef) => (acc, cur) => {
    if (customFilter[cur] == null) return acc;
    if (cur === 'titulo' || cur === 'descricao') {
       const regex = new RegExp(`^${customFilter[cur]}`, 'gi');
@@ -12,8 +12,11 @@ const normalizeCustomFilter = customFilter => (acc, cur) => {
    }
 
    if (cur === 'timeResponsavel' || cur === 'usuarioDesignado') {
-      if (mongoose.Types.ObjectId.isValid(customFilter[cur]))
-         acc[cur] = mongoose.Types.ObjectId(customFilter[cur]);
+      if (mongoose.Types.ObjectId.isValid(customFilter[cur])) {
+         if (lookByRef)
+            acc[`${cur}._id`] = mongoose.Types.ObjectId(customFilter[cur]);
+         else acc[cur] = mongoose.Types.ObjectId(customFilter[cur]);
+      }
       return acc;
    }
 
@@ -24,6 +27,36 @@ const normalizeCustomFilter = customFilter => (acc, cur) => {
 
    acc[cur] = customFilter[cur];
    return acc;
+};
+
+const mountQuery = () => {
+   const lookupUser = {
+      $lookup: {
+         from: 'usuarios',
+         localField: 'usuarioDesignado',
+         foreignField: '_id',
+         as: 'usuarioDesignado',
+      },
+   };
+
+   const lookupTeams = {
+      $lookup: {
+         from: 'times',
+         localField: 'timeResponsavel',
+         foreignField: '_id',
+         as: 'timeResponsavel',
+      },
+   };
+
+   const unwindTeam = { $unwind: '$timeResponsavel' };
+   const unwindUser = {
+      $unwind: {
+         path: '$usuarioDesignado',
+         preserveNullAndEmptyArrays: true,
+      },
+   };
+
+   return [lookupTeams, unwindTeam, lookupUser, unwindUser];
 };
 
 module.exports = {
@@ -96,22 +129,29 @@ module.exports = {
       return totalRecords;
    },
    async findItemsByTeamsPaginated(teamsIds, page, itemsPerPage, sort) {
-      const query = [];
+      const query = [...mountQuery()];
+
+      const hasSort =
+         Object.values(sort).filter(val => val != null).length === 2;
+      if (hasSort) {
+         query.push({
+            $sort: {
+               [sort.by === 'timeResponsavel' || sort.by === 'usuarioDesignado'
+                  ? `${sort.by}.nome`
+                  : sort.by]: sort.order,
+            },
+         });
+      }
+
       const filterByTeamsIds = {
          $match: {
-            timeResponsavel: {
+            'timeResponsavel._id': {
                $in: teamsIds
                   .filter(teamId => mongoose.Types.ObjectId.isValid(teamId))
                   .map(teamId => mongoose.Types.ObjectId(teamId)),
             },
          },
       };
-
-      const hasSort =
-         Object.values(sort).filter(val => val != null).length === 2;
-      if (hasSort) {
-         query.push({ $sort: { [sort.by]: sort.order } });
-      }
 
       query.push(filterByTeamsIds);
 
@@ -123,11 +163,6 @@ module.exports = {
       query.push(...pagination);
 
       const items = await Item.aggregate(query);
-      await Item.populate(items, {
-         path: 'usuarioDesignado',
-         select: 'nome email',
-      });
-      await Item.populate(items, { path: 'timeResponsavel', select: 'nome' });
       return items;
    },
 
@@ -137,17 +172,23 @@ module.exports = {
       itemsPerPage,
       sort
    ) {
-      const query = [];
+      const query = [...mountQuery()];
 
       const match = Object.keys(customFilter).reduce(
-         normalizeCustomFilter(customFilter),
+         normalizeCustomFilter(customFilter, true),
          {}
       );
 
       const hasSort =
          Object.values(sort).filter(val => val != null).length === 2;
       if (hasSort) {
-         query.push({ $sort: { [sort.by]: sort.order } });
+         query.push({
+            $sort: {
+               [sort.by === 'timeResponsavel' || sort.by === 'usuarioDesignado'
+                  ? `${sort.by}.nome`
+                  : sort.by]: sort.order,
+            },
+         });
       }
 
       const filter = {
@@ -164,11 +205,7 @@ module.exports = {
       query.push(...pagination);
 
       const items = await Item.aggregate(query);
-      await Item.populate(items, {
-         path: 'usuarioDesignado',
-         select: 'nome email',
-      });
-      await Item.populate(items, { path: 'timeResponsavel', select: 'nome' });
+
       return items;
    },
 
