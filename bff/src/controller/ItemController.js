@@ -1,10 +1,44 @@
 const axios = require('axios');
 const itemsLogic = require('../logic/item');
 
-const fetchItems = (teams, page, itemsPerPage) =>
+const fetchCustomFilterParams = (query) => {
+   const sort = {};
+   const customFilter = {};
+
+   ({ sortBy: sort.by, sortOrder: sort.order } = query);
+   sort.order = parseInt(sort.order, 10);
+   ({
+      titulo: customFilter.titulo,
+      descricao: customFilter.descricao,
+      timeResponsavel: customFilter.timeResponsavel,
+      usuarioDesignado: customFilter.usuarioDesignado,
+      prioridade: customFilter.prioridade,
+      dificuldade: customFilter.dificuldade,
+   } = query);
+
+   return { sort, customFilter };
+};
+
+const fetchItems = (teams, sort, page, itemsPerPage) =>
    axios.get(
-      `http://localhost:3331/items/teams?page=${page}&itemsPerPage=${itemsPerPage}&${teams
-         .map((team) => `teamsIds=${team}`)
+      `http://localhost:3331/items/teams?page=${page}&itemsPerPage=${itemsPerPage}&${
+         sort.by != null ? `sortBy=${sort.by}&` : ''
+      }${
+         sort.order != null && !Number.isNaN(sort.order)
+            ? `sortOrder=${sort.order}&`
+            : ''
+      }${teams.map((team) => `teamsIds=${team}`).join('&')}`
+   );
+
+const fetchItemsCustomFilter = (customFilter, sort, page, itemsPerPage) =>
+   axios.get(
+      `http://localhost:3331/items/teams?page=${page}&itemsPerPage=${itemsPerPage}&${
+         sort.by != null ? `sortBy=${sort.by}&` : ''
+      }${sort.order != null ? `sortOrder=${sort.order}&` : ''}${Object.keys(
+         customFilter
+      )
+         .filter((key) => customFilter[key] != null)
+         .map((key) => `${key}=${customFilter[key]}`)
          .join('&')}`
    );
 
@@ -15,9 +49,25 @@ const fetchTotalRecords = (teams) =>
          .join('&')}`
    );
 
+const fetchTotalRecordsCustomFilter = (customFilter) =>
+   axios.get(
+      `http://localhost:3331/items/teams/count?${Object.keys(customFilter)
+         .filter((key) => customFilter[key] != null)
+         .map((key) => `${key}=${customFilter[key]}`)
+         .join('&')}`
+   );
+
 const findItemsByUser = async (req, res) => {
    const { times: teams } = req.user;
    const { page, itemsPerPage } = req.query;
+
+   const { sort, customFilter } = fetchCustomFilterParams(req.query);
+
+   const hasCustomFilter =
+      Object.values(customFilter).filter((val) => val != null).length > 0;
+
+   const hasSort =
+      Object.values(customFilter).filter((val) => val != null).length === 2;
 
    try {
       const [
@@ -26,8 +76,12 @@ const findItemsByUser = async (req, res) => {
             data: { totalRecords },
          },
       ] = await axios.all([
-         fetchItems(teams, page, itemsPerPage),
-         fetchTotalRecords(teams),
+         hasCustomFilter || hasSort
+            ? fetchItemsCustomFilter(customFilter, sort, page, itemsPerPage)
+            : fetchItems(teams, sort, page, itemsPerPage),
+         hasCustomFilter
+            ? fetchTotalRecordsCustomFilter(customFilter)
+            : fetchTotalRecords(teams),
       ]);
 
       const formatedItems = itemsLogic.formatItems(items);
