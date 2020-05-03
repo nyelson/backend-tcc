@@ -14,12 +14,16 @@ routes.get(
    '/items/teams',
    searchByTeamValidation,
    paginationValidation.validatePaginationQueryParams,
+   paginationValidation.validateSortingQueryParams,
+   paginationValidation.validateFilterQueryParams,
    ItemController.findItemsByTeams
 );
 
 routes.get(
    '/items/teams/count',
    searchByTeamValidation,
+   paginationValidation.validateSortingQueryParams,
+   paginationValidation.validateFilterQueryParams,
    ItemController.findItemsByTeamsTotalRecords
 );
 
