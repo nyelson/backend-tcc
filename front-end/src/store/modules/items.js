@@ -18,11 +18,18 @@ export const mutations = {
 };
 
 export const actions = {
-  fetchItems({ commit }, { page, itemsPerPage }) {
+  fetchItems({ commit }, { page, itemsPerPage, customFilter, sort }) {
     return axios
       .get(
         `http://localhost:3330/items/by-user?page=${page ??
-          firstPage}&itemsPerPage=${itemsPerPage ?? defaultItemsPerPage}`
+          firstPage}&itemsPerPage=${itemsPerPage ?? defaultItemsPerPage}&${
+          sort.by != null ? `sortBy=${sort.by}&` : ""
+        }${
+          sort.order != null ? `sortOrder=${sort.order === true ? 1 : -1}&` : ""
+        }${Object.keys(customFilter || {})
+          .filter((key) => customFilter[key] != null && customFilter[key] != "")
+          .map((key) => `${key}=${customFilter[key]}`)
+          .join("&")}`
       )
       .then(({ data: { items: paginatedItems, totalRecords: totalItems } }) => {
         commit("SET_ITEMS_PAGINATED", { paginatedItems, totalItems });

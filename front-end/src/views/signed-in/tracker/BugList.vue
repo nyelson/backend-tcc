@@ -1,6 +1,6 @@
 <template>
   <v-container id="bug-list" fluid tag="section">
-    <dash-board-filter />
+    <dash-board-filter @filter="filter" />
     <v-row>
       <v-col cols="12">
         <v-card>
@@ -29,10 +29,13 @@ export default {
   },
   data: () => ({
     options: {},
+    filterData: {},
+    pagination: {},
+    sort: {},
     loading: true,
     headers: [
-      { text: "Título", value: "titulo", sortable: false },
-      { text: "Descrição", value: "descricao", sortable: false },
+      { text: "Título", value: "titulo" },
+      { text: "Descrição", value: "descricao" },
       { text: "Prioridade", value: "prioridade" },
       { text: "Data de Criação", value: "dataCadastro" },
       { text: "Severidade", value: "dificuldade" },
@@ -49,7 +52,15 @@ export default {
           sortBy: [sortBy],
           sortDesc: [isDesc]
         } = newValue;
-        this.getDataFromApi({ page, itemsPerPage, sortBy, isDesc });
+        this.pagination = { page, itemsPerPage };
+        this.sort = { sortBy, isDesc };
+        this.getDataFromApi({
+          page: this.pagination.page,
+          itemsPerPage: this.pagination.itemsPerPage,
+          sortBy: this.sort.sortBy,
+          isDesc: this.sort.isDesc,
+          customFilter: this.filterData
+        });
       },
       deep: true
     }
@@ -59,11 +70,25 @@ export default {
   },
   methods: {
     ...mapActions("items", ["fetchItems"]),
-    getDataFromApi({ page, itemsPerPage, sortBy, isDesc }) {
+    filter(newValue) {
+      console.log(newValue);
+      this.filterData = newValue;
+      this.getDataFromApi({
+        page: this.pagination.page,
+        itemsPerPage: this.pagination.itemsPerPage,
+        sortBy: this.sort.sortBy,
+        isDesc: this.sort.isDesc,
+        customFilter: this.filterData
+      });
+    },
+    getDataFromApi({ page, itemsPerPage, sortBy, isDesc, customFilter }) {
       this.loading = true;
-      this.fetchItems({ page, itemsPerPage, sortBy, isDesc }).then(
-        () => (this.loading = false)
-      );
+      this.fetchItems({
+        page,
+        itemsPerPage,
+        customFilter,
+        sort: { by: sortBy, order: isDesc }
+      }).then(() => (this.loading = false));
     }
   }
 };
