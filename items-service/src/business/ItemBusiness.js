@@ -33,7 +33,17 @@ module.exports = {
       return items;
    },
 
-   async findItemsByTeamsTotalRecords(teamsIds) {
+   async findItemsByTeamsTotalRecords(teamsIds, customFilter) {
+      const hasCustomFilter =
+         Object.values(customFilter).filter(val => val != null).length > 0;
+
+      if (hasCustomFilter) {
+         const totalRecords = await ItemRepository.findItemsByTeamsTotalRecordsCustomFilter(
+            customFilter
+         );
+         return totalRecords;
+      }
+
       const totalRecords = await ItemRepository.findItemsByTeamsTotalRecords(
          teamsIds
       );

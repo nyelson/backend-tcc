@@ -85,6 +85,16 @@ module.exports = {
 
       return totalRecords;
    },
+   async findItemsByTeamsTotalRecordsCustomFilter(customFilter) {
+      const match = Object.keys(customFilter).reduce(
+         normalizeCustomFilter(customFilter),
+         {}
+      );
+
+      const totalRecords = await Item.countDocuments(match);
+
+      return totalRecords;
+   },
    async findItemsByTeamsPaginated(teamsIds, page, itemsPerPage, sort) {
       const query = [];
       const filterByTeamsIds = {

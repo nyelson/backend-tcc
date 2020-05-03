@@ -1,5 +1,6 @@
 const hasCustomFilter = query => {
    return (
+      query.titulo ||
       query.timeResponsaveltitulo ||
       query.descricao ||
       query.timeResponsavel ||

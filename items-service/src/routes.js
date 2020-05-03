@@ -22,6 +22,8 @@ routes.get(
 routes.get(
    '/items/teams/count',
    searchByTeamValidation,
+   paginationValidation.validateSortingQueryParams,
+   paginationValidation.validateFilterQueryParams,
    ItemController.findItemsByTeamsTotalRecords
 );
 

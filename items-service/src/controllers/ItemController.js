@@ -1,5 +1,23 @@
 const ItemBusiness = require('../business/ItemBusiness');
 
+const fetchCustomFilterParams = query => {
+   const sort = {};
+   const customFilter = {};
+
+   ({ sortBy: sort.by, sortOrder: sort.order } = query);
+   sort.order = parseInt(sort.order, 10);
+   ({
+      titulo: customFilter.titulo,
+      descricao: customFilter.descricao,
+      timeResponsavel: customFilter.timeResponsavel,
+      usuarioDesignado: customFilter.usuarioDesignado,
+      prioridade: customFilter.prioridade,
+      dificuldade: customFilter.dificuldade,
+   } = query);
+
+   return { sort, customFilter };
+};
+
 module.exports = {
    async findItem(request, response) {
       const { id } = request.params;
@@ -11,21 +29,10 @@ module.exports = {
    },
 
    async findItemsByTeams(request, response) {
-      const sort = {};
-      const customFilter = {};
       const { teamsIds: query, page, itemsPerPage } = request.query;
-      ({ sortBy: sort.by, sortOrder: sort.order } = request.query);
-      sort.order = parseInt(sort.order, 10);
-      ({
-         titulo: customFilter.titulo,
-         descricao: customFilter.descricao,
-         timeResponsavel: customFilter.timeResponsavel,
-         usuarioDesignado: customFilter.usuarioDesignado,
-         prioridade: customFilter.prioridade,
-         dificuldade: customFilter.dificuldade,
-      } = request.query);
-
       const teamsIds = Array.isArray(query) ? query : [query];
+
+      const { sort, customFilter } = fetchCustomFilterParams(request.query);
 
       if (page != null && itemsPerPage != null) {
          const items = await ItemBusiness.findItemsByTeamsPaginated(
@@ -46,9 +53,11 @@ module.exports = {
       const { teamsIds: query } = request.query;
 
       const teamsIds = Array.isArray(query) ? query : [query];
+      const { customFilter } = fetchCustomFilterParams(request.query);
 
       const totalRecords = await ItemBusiness.findItemsByTeamsTotalRecords(
-         teamsIds
+         teamsIds,
+         customFilter
       );
       return response.status(200).json({ totalRecords });
    },
