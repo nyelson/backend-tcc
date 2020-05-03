@@ -34,9 +34,11 @@ const fetchItemsCustomFilter = (customFilter, sort, page, itemsPerPage) =>
    axios.get(
       `http://localhost:3331/items/teams?page=${page}&itemsPerPage=${itemsPerPage}&${
          sort.by != null ? `sortBy=${sort.by}&` : ''
-      }${sort.order != null ? `sortOrder=${sort.order}&` : ''}${Object.keys(
-         customFilter
-      )
+      }${
+         sort.order != null && !Number.isNaN(sort.order)
+            ? `sortOrder=${sort.order}&`
+            : ''
+      }${Object.keys(customFilter)
          .filter((key) => customFilter[key] != null)
          .map((key) => `${key}=${customFilter[key]}`)
          .join('&')}`
@@ -67,7 +69,9 @@ const findItemsByUser = async (req, res) => {
       Object.values(customFilter).filter((val) => val != null).length > 0;
 
    const hasSort =
-      Object.values(customFilter).filter((val) => val != null).length === 2;
+      Object.values(customFilter).filter(
+         (val) => val != null && !Number.isNaN(val)
+      ).length === 2;
 
    try {
       const [
@@ -87,7 +91,6 @@ const findItemsByUser = async (req, res) => {
       const formatedItems = itemsLogic.formatItems(items);
       return res.status(200).json({ items: formatedItems, totalRecords });
    } catch (err) {
-      console.error(err);
       if (err.response) {
          return res.status(err.response.status).json(err.response.data);
       }
