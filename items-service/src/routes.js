@@ -14,6 +14,8 @@ routes.get(
    '/items/teams',
    searchByTeamValidation,
    paginationValidation.validatePaginationQueryParams,
+   paginationValidation.validateSortingQueryParams,
+   paginationValidation.validateFilterQueryParams,
    ItemController.findItemsByTeams
 );
 

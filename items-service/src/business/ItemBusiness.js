@@ -29,8 +29,8 @@ module.exports = {
       return item;
    },
    async findItemsByTeams(teamsIds) {
-      const item = await ItemRepository.findItemsByTeams(teamsIds);
-      return item;
+      const items = await ItemRepository.findItemsByTeams(teamsIds);
+      return items;
    },
 
    async findItemsByTeamsTotalRecords(teamsIds) {
@@ -39,21 +39,40 @@ module.exports = {
       );
       return totalRecords;
    },
-   async findItemsByTeamsPaginated(teamsIds, page, itemsPerPage) {
-      const item = await ItemRepository.findItemsByTeamsPaginated(
+   async findItemsByTeamsPaginated(
+      teamsIds,
+      page,
+      itemsPerPage,
+      sort,
+      customFilter
+   ) {
+      const hasCustomFilter =
+         Object.values(customFilter).filter(val => val != null).length > 0;
+      if (hasCustomFilter) {
+         const items = await ItemRepository.findItemsByCustomFilterPaginated(
+            customFilter,
+            page,
+            itemsPerPage,
+            sort
+         );
+         return items;
+      }
+
+      const items = await ItemRepository.findItemsByTeamsPaginated(
          teamsIds,
          page,
-         itemsPerPage
+         itemsPerPage,
+         sort
       );
-      return item;
+      return items;
    },
    async findItemsByTeam(teamId) {
-      const item = await ItemRepository.findItemsByTeam(teamId);
-      return item;
+      const items = await ItemRepository.findItemsByTeam(teamId);
+      return items;
    },
    async findItemsByUser(userId) {
-      const item = await ItemRepository.findItemsByUser(userId);
-      return item;
+      const items = await ItemRepository.findItemsByUser(userId);
+      return items;
    },
    async findItemByTitulo(titulo) {
       const item = await ItemRepository.findItemByTitulo(titulo);

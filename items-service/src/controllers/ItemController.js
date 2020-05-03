@@ -11,7 +11,19 @@ module.exports = {
    },
 
    async findItemsByTeams(request, response) {
+      let sort = {};
+      let customFilter = {};
       const { teamsIds: query, page, itemsPerPage } = request.query;
+      ({ sortBy: sort.by, sortOrder: sort.order } = request.query);
+      sort.order = parseInt(sort.order);
+      ({
+         titulo: customFilter.titulo,
+         descricao: customFilter.descricao,
+         timeResponsavel: customFilter.timeResponsavel,
+         usuarioDesignado: customFilter.usuarioDesignado,
+         prioridade: customFilter.prioridade,
+         dificuldade: customFilter.dificuldade,
+      } = request.query);
 
       const teamsIds = Array.isArray(query) ? query : [query];
 
@@ -19,7 +31,9 @@ module.exports = {
          const items = await ItemBusiness.findItemsByTeamsPaginated(
             teamsIds,
             parseInt(page, 10),
-            parseInt(itemsPerPage, 10)
+            parseInt(itemsPerPage, 10),
+            sort,
+            customFilter
          );
          return response.status(200).json(items);
       }

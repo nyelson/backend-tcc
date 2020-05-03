@@ -18,4 +18,57 @@ const validatePaginationQueryParams = async (request, response, next) => {
    return next();
 };
 
-module.exports = { validatePaginationQueryParams };
+const validateSortingQueryParams = async (request, response, next) => {
+   const { sortBy, sortOrder } = request.query;
+
+   if (sortBy == null && sortOrder == null) return next();
+   const parsedSortOrder = parseInt(sortOrder, 10);
+   if (
+      sortBy == null ||
+      sortOrder == null ||
+      Number.isNaN(parsedSortOrder) ||
+      (parsedSortOrder != 1 && parsedSortOrder != -1)
+   )
+      return response
+         .status(400)
+         .json({ erro: 'Parametros de ordenação inválidos' });
+
+   return next();
+};
+
+const validateFilterQueryParams = async (request, response, next) => {
+   const {
+      titulo,
+      descricao,
+      timeResponsavel,
+      usuarioDesignado,
+      prioridade,
+      dificuldade,
+   } = request.query;
+
+   if (
+      titulo == null &&
+      descricao == null &&
+      timeResponsavel == null &&
+      usuarioDesignado == null &&
+      prioridade == null &&
+      dificuldade == null
+   )
+      return next();
+
+   const errorMsg = 'Parametros de filtro inválidos';
+
+   if (prioridade != null && Number.isNaN(parseInt(prioridade, 10)))
+      return response.status(400).json({ erro: errorMsg });
+
+   if (dificuldade != null && Number.isNaN(parseInt(dificuldade, 10)))
+      return response.status(400).json({ erro: errorMsg });
+
+   return next();
+};
+
+module.exports = {
+   validatePaginationQueryParams,
+   validateSortingQueryParams,
+   validateFilterQueryParams,
+};
