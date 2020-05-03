@@ -10,6 +10,11 @@ const findTeams = async () => {
    return teams;
 };
 
+const findTeamsByUser = async userId => {
+   const teams = await Team.find({ usuarios: userId });
+   return teams;
+};
+
 const findTeamByName = async name => {
    const team = await Team.findOne({ nome: name }, () => {});
    return team;
@@ -28,6 +33,7 @@ const deleteTeam = async id => {
 module.exports = {
    addTeam,
    findTeams,
+   findTeamsByUser,
    findTeamByName,
    findTeamById,
    deleteTeam,

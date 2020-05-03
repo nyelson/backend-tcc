@@ -138,6 +138,50 @@ describe('Team Endpoints', () => {
       });
    });
 
+   describe('GET /user/:id', () => {
+      it('should return an empty array when no team is available', async done => {
+         const res = await request(app)
+            .get(`/times/user/${mongoose.Types.ObjectId()}`)
+            .send();
+         expect(res.statusCode).toEqual(200);
+         expect(res.body).toHaveProperty('times');
+         expect(res.body.times).toEqual([]);
+
+         done();
+      });
+
+      it('should return bad request when search with user id', async done => {
+         const res = await request(app)
+            .get(`/times/user/`)
+            .send();
+         expect(res.statusCode).toEqual(400);
+         expect(res.body).toHaveProperty('erro');
+         expect(res.body.erro).toEqual('Id inválido');
+
+         done();
+      });
+
+      it('should return the teams', async done => {
+         const userId = mongoose.Types.ObjectId();
+         const teamModel = Team.model('Time');
+         const team = new teamModel({
+            nome: 'abc',
+            usuarios: [userId],
+         });
+
+         await team.save();
+
+         const res = await request(app)
+            .get(`/times/user/${userId}`)
+            .send();
+
+         expect(res.statusCode).toEqual(200);
+         expect(...res.body.times[0].usuarios).toContain(userId);
+
+         done();
+      });
+   });
+
    describe('DELETE /:id', () => {
       it('should return not found when no team is available', async done => {
          const res = await request(app)
