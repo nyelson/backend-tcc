@@ -5,6 +5,12 @@ const findTeams = async (_request, response) => {
    return response.status(200).json({ times: teams });
 };
 
+const findTeamsByUser = async (request, response) => {
+   const { id: userId } = request.params;
+   const teams = await TeamBusiness.findTeamsByUser(userId);
+   return response.status(200).json({ times: teams });
+};
+
 const findTeam = async (request, response) => {
    const { id } = request.params;
 
@@ -51,6 +57,7 @@ const deleteTeam = async (request, response) => {
 
 module.exports = {
    findTeams,
+   findTeamsByUser,
    findTeam,
    findTeamByName,
    addTeam,

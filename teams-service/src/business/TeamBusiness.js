@@ -15,6 +15,11 @@ const findTeams = async () => {
    return teams;
 };
 
+const findTeamsByUser = async userId => {
+   const teams = await TeamRepository.findTeamsByUser(userId);
+   return teams;
+};
+
 const findTeamById = async id => {
    const team = await TeamRepository.findTeamById(id);
    return team;
@@ -32,6 +37,7 @@ module.exports = {
    teamAlreadyExists,
    addTeam,
    findTeams,
+   findTeamsByUser,
    findTeamById,
    findTeamByName,
    deleteTeam,
