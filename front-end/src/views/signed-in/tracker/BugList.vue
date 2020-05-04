@@ -4,6 +4,13 @@
     <v-row>
       <v-col cols="12">
         <v-card>
+          <v-card-title>
+            <v-row justify="end">
+              <v-col class="align-right" cols="12">
+                <add-bug />
+              </v-col>
+            </v-row>
+          </v-card-title>
           <v-data-table
             :headers="headers"
             :items="items"
@@ -25,7 +32,8 @@ export default {
   name: "BugList",
   components: {
     DashBoardFilter: () =>
-      import("../../../components/dashboard/tracker/FilterBugs")
+      import("../../../components/dashboard/tracker/FilterBugs"),
+    AddBug: () => import("../../../components/dashboard/tracker/AddBug")
   },
   data: () => ({
     options: {},
@@ -35,7 +43,7 @@ export default {
     loading: true,
     headers: [
       { text: "Título", value: "titulo" },
-      { text: "Descrição", value: "descricao" },
+      { text: "Status", value: "status" },
       { text: "Prioridade", value: "prioridade" },
       { text: "Data de Criação", value: "dataCadastro" },
       { text: "Severidade", value: "dificuldade" },
@@ -71,7 +79,6 @@ export default {
   methods: {
     ...mapActions("items", ["fetchItems"]),
     filter(newValue) {
-      console.log(newValue);
       this.filterData = newValue;
       this.getDataFromApi({
         page: this.pagination.page,
@@ -93,3 +100,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

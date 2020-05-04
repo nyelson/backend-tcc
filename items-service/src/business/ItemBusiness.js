@@ -92,4 +92,9 @@ module.exports = {
       const retorno = await ItemRepository.deleteItemById(id);
       return retorno;
    },
+
+   async setUser(id, userId) {
+      const retorno = await ItemRepository.setUser(id, userId);
+      return retorno;
+   },
 };

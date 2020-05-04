@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import * as authentication from "@/store/modules/authentication.js";
 import * as items from "@/store/modules/items.js";
+import * as teams from "@/store/modules/teams.js";
 
 Vue.use(Vuex);
 
@@ -10,6 +11,7 @@ export default new Vuex.Store({
   modules: {
     authentication,
     items,
+    teams,
   },
   state: {
     drawer: true,

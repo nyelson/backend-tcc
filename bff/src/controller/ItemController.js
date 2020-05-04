@@ -14,6 +14,9 @@ const fetchCustomFilterParams = (query) => {
       usuarioDesignado: customFilter.usuarioDesignado,
       prioridade: customFilter.prioridade,
       dificuldade: customFilter.dificuldade,
+      status: customFilter.status,
+      dataCriacao: customFilter.dataCriacao,
+      dataFinalizacao: customFilter.dataFinalizacao,
    } = query);
 
    return { sort, customFilter };
@@ -99,4 +102,17 @@ const findItemsByUser = async (req, res) => {
    }
 };
 
-module.exports = { findItemsByUser };
+const addItem = async (req, res) => {
+   try {
+      const resp = await axios.post('http://localhost:3331/items', req.body);
+      return res.status(resp.status).json(resp.data);
+   } catch (err) {
+      if (err.response) {
+         return res.status(err.response.status).json(err.response.data);
+      }
+
+      return res.status(500).json({ erro: 'Erro interno do servidor' });
+   }
+};
+
+module.exports = { findItemsByUser, addItem };
