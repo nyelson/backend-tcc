@@ -10,6 +10,8 @@ routes.get('/items');
 routes.get('/item/:id', ItemController.findItem);
 routes.delete('/items/delete/:id', ItemController.deleteItem);
 
+routes.patch('/item/:id', ItemController.setUser);
+
 routes.get(
    '/items/teams',
    searchByTeamValidation,

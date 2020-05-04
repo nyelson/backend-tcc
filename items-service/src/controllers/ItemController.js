@@ -13,6 +13,9 @@ const fetchCustomFilterParams = query => {
       usuarioDesignado: customFilter.usuarioDesignado,
       prioridade: customFilter.prioridade,
       dificuldade: customFilter.dificuldade,
+      status: customFilter.status,
+      dataCriacao: customFilter.dataCriacao,
+      dataFinalizacao: customFilter.dataFinalizacao,
    } = query);
 
    return { sort, customFilter };
@@ -113,11 +116,20 @@ module.exports = {
 
       const retorno = await ItemBusiness.deleteItemById(id);
 
-      if (retorno)
-         return response
-            .status(204)
-            .json({ error: 'Item deletado com sucesso!' });
+      if (retorno) return response.status(204).send();
 
       return response.status(500).json({ error: 'Nenhum item foi deletado' });
+   },
+
+   async setUser(request, response) {
+      const { id } = request.params;
+      const { userId } = request.body;
+
+      const retorno = await ItemBusiness.setUser(id, userId);
+
+      if (retorno) return response.status(204).send();
+      return response
+         .status(500)
+         .json({ error: 'Não foi possível atualizar item' });
    },
 };

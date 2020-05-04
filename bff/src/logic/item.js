@@ -4,8 +4,15 @@ const niveis = {
    3: 'Alta',
 };
 
+const status = {
+   1: 'Aberto',
+   2: 'Em desenvolvimento',
+   3: 'Em testes',
+   4: 'Fechado',
+};
+
 const formatDateToString = (date) =>
-   `${date.getDate()}/${(date.getMonth() + 1)
+   `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
       .toString()
       .padStart(
          2,
@@ -17,21 +24,26 @@ const getPropertyOrDefaultValue = (entity, property, defaultValue) =>
 
 const formatItems = (items) => {
    return items.map((item) => {
-      const date = new Date(item.dataCadastro);
-      item.usuarioDesignado = getPropertyOrDefaultValue(
-         item.usuarioDesignado,
-         'nome',
-         '-'
-      );
-      item.dificuldade = niveis[item.dificuldade];
-      item.prioridade = niveis[item.prioridade];
-      item.timeResponsavel = getPropertyOrDefaultValue(
-         item.timeResponsavel,
-         'nome',
-         '-'
-      );
-      item.dataCadastro = formatDateToString(date);
-      return item;
+      const creationDate = new Date(item.dataCadastro);
+      return {
+         id: item._id,
+         titulo: item.titulo,
+         descricao: item.descricao,
+         prioridade: niveis[item.prioridade],
+         dificuldade: niveis[item.dificuldade],
+         status: status[item.status],
+         dataCadastro: formatDateToString(creationDate),
+         usuarioDesignado: getPropertyOrDefaultValue(
+            item.usuarioDesignado,
+            'nome',
+            '-'
+         ),
+         timeResponsavel: getPropertyOrDefaultValue(
+            item.timeResponsavel,
+            'nome',
+            '-'
+         ),
+      };
    });
 };
 

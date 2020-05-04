@@ -44,6 +44,9 @@ const validateFilterQueryParams = async (request, response, next) => {
       usuarioDesignado,
       prioridade,
       dificuldade,
+      status,
+      dataCriacao,
+      dataFinalizacao,
    } = request.query;
 
    if (
@@ -52,7 +55,10 @@ const validateFilterQueryParams = async (request, response, next) => {
       timeResponsavel == null &&
       usuarioDesignado == null &&
       prioridade == null &&
-      dificuldade == null
+      dificuldade == null &&
+      status == null &&
+      dataCriacao == null &&
+      dataFinalizacao == null
    )
       return next();
 
@@ -62,6 +68,9 @@ const validateFilterQueryParams = async (request, response, next) => {
       return response.status(400).json({ erro: errorMsg });
 
    if (dificuldade != null && Number.isNaN(parseInt(dificuldade, 10)))
+      return response.status(400).json({ erro: errorMsg });
+
+   if (status != null && Number.isNaN(parseInt(status, 10)))
       return response.status(400).json({ erro: errorMsg });
 
    return next();

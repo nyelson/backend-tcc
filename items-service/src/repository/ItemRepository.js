@@ -20,7 +20,7 @@ const normalizeCustomFilter = (customFilter, lookByRef) => (acc, cur) => {
       return acc;
    }
 
-   if (cur === 'prioridade' || cur === 'dificuldade') {
+   if (cur === 'prioridade' || cur === 'dificuldade' || cur === 'status') {
       acc[cur] = parseInt(customFilter[cur], 10);
       return acc;
    }
@@ -59,6 +59,8 @@ const mountQuery = () => {
    return [lookupTeams, unwindTeam, lookupUser, unwindUser];
 };
 
+const ABERTO = 1;
+
 module.exports = {
    async addItem(
       titulo,
@@ -73,6 +75,7 @@ module.exports = {
          descricao,
          prioridade,
          dificuldade,
+         status: ABERTO,
          dataCadastro: Date.now(),
          timeResponsavel,
          usuarioDesignado,
@@ -234,5 +237,14 @@ module.exports = {
    async deleteItemById(id) {
       const result = await Item.deleteOne({ _id: id });
       return result.deletedCount === 1;
+   },
+
+   async setUser(id, userId) {
+      const result = await Item.updateOne(
+         { _id: mongoose.Types.ObjectId(id) },
+         { $set: { usuarioDesignado: mongoose.Types.ObjectId(userId) } }
+      );
+
+      return result.nModified === 1;
    },
 };

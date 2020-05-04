@@ -9,6 +9,7 @@ const ItemSchema = new mongoose.Schema({
    dataCadastro: Date,
    dataInicio: Date,
    dataFinalizacao: Date,
+   status: Number,
    timeResponsavel: { type: mongoose.Types.ObjectId, ref: 'Time' },
    usuarioDesignado: { type: mongoose.Types.ObjectId, ref: 'Usuario' },
 });

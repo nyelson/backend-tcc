@@ -5,6 +5,10 @@ const defaultItemsPerPage = 10;
 
 export const state = {
   items: [],
+  page: firstPage,
+  itemsPerPage: defaultItemsPerPage,
+  customFilter: {},
+  sort: {},
   totalItems: 0,
 };
 
@@ -14,6 +18,12 @@ export const mutations = {
   SET_ITEMS_PAGINATED(state, { paginatedItems, totalItems }) {
     state.items = paginatedItems;
     state.totalItems = totalItems;
+  },
+  SET_FILTER(state, { page, itemsPerPage, customFilter, sort }) {
+    state.page = page;
+    state.itemsPerPage = itemsPerPage;
+    state.customFilter = customFilter;
+    state.sort = sort;
   },
 };
 
@@ -32,7 +42,20 @@ export const actions = {
           .join("&")}`
       )
       .then(({ data: { items: paginatedItems, totalRecords: totalItems } }) => {
+        commit("SET_FILTER", { page, itemsPerPage, customFilter, sort });
         commit("SET_ITEMS_PAGINATED", { paginatedItems, totalItems });
+      })
+      .catch((err) => {
+        throw err.response;
+      });
+  },
+  addItem({ state, dispatch }, item) {
+    const { page, itemsPerPage, customFilter, sort } = state;
+    return axios
+      .post("http://localhost:3330/items", item)
+      .then(() => {
+        dispatch("fetchItems", { page, itemsPerPage, customFilter, sort });
+        return;
       })
       .catch((err) => {
         throw err.response;
